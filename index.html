@@ -1,0 +1,1562 @@
+<!DOCTYPE html>
+<html lang="zh-CN" class="scroll-smooth">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>TickSpring · 写作与闲话集</title>
+
+<!-- 字体：用 media="print" + onload 异步加载，不阻塞渲染。
+     fonts.googleapis.com 在国内打不开，同步加载会让手机先白屏几秒等它超时；
+     异步之后加载不出来就用系统字体（宋体 / 苹方）顶上，页面照样秒开。 -->
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link rel="stylesheet" media="print" onload="this.media='all'"
+      href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;500;600;700&family=Noto+Sans+SC:wght@300;400;500&display=swap" />
+<noscript>
+  <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;500;600;700&family=Noto+Sans+SC:wght@300;400;500&display=swap" />
+</noscript>
+
+<!-- Tailwind 预编译好的样式。
+     原来是引用 cdn.tailwindcss.com 那个 Play CDN：每打开一次都要连国外、
+     下载几百 KB 再现场跑一遍编译器。这里换成构建时生成好的静态 CSS，
+     整页不再依赖任何国外 CDN，国内打开不用等。
+     改样式时用 tailwind.config.js 重新编译（见同目录 README）。 -->
+<!-- TW:START  下面这段是 tailwind 预编译产物，用 构建工具\重新编译.ps1 生成，不要手改 -->
+<style>*,:after,:before{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgba(59,130,246,.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: ;--tw-contain-size: ;--tw-contain-layout: ;--tw-contain-paint: ;--tw-contain-style: }::backdrop{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgba(59,130,246,.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: ;--tw-contain-size: ;--tw-contain-layout: ;--tw-contain-paint: ;--tw-contain-style: }/*! tailwindcss v3.4.17 | MIT License | https://tailwindcss.com*/*,:after,:before{box-sizing:border-box;border:0 solid #e5e7eb}:after,:before{--tw-content:""}:host,html{line-height:1.5;-webkit-text-size-adjust:100%;-moz-tab-size:4;-o-tab-size:4;tab-size:4;font-family:Noto Sans SC,PingFang SC,Microsoft YaHei,微软雅黑,Source Han Sans SC,Noto Sans CJK SC,system-ui,-apple-system,sans-serif;font-feature-settings:normal;font-variation-settings:normal;-webkit-tap-highlight-color:transparent}body{margin:0;line-height:inherit}hr{height:0;color:inherit;border-top-width:1px}abbr:where([title]){-webkit-text-decoration:underline dotted;text-decoration:underline dotted}h1,h2,h3,h4,h5,h6{font-size:inherit;font-weight:inherit}a{color:inherit;text-decoration:inherit}b,strong{font-weight:bolder}code,kbd,pre,samp{font-family:ui-monospace,SFMono-Regular,Menlo,Monaco,Consolas,Liberation Mono,Courier New,monospace;font-feature-settings:normal;font-variation-settings:normal;font-size:1em}small{font-size:80%}sub,sup{font-size:75%;line-height:0;position:relative;vertical-align:baseline}sub{bottom:-.25em}sup{top:-.5em}table{text-indent:0;border-color:inherit;border-collapse:collapse}button,input,optgroup,select,textarea{font-family:inherit;font-feature-settings:inherit;font-variation-settings:inherit;font-size:100%;font-weight:inherit;line-height:inherit;letter-spacing:inherit;color:inherit;margin:0;padding:0}button,select{text-transform:none}button,input:where([type=button]),input:where([type=reset]),input:where([type=submit]){-webkit-appearance:button;background-color:transparent;background-image:none}:-moz-focusring{outline:auto}:-moz-ui-invalid{box-shadow:none}progress{vertical-align:baseline}::-webkit-inner-spin-button,::-webkit-outer-spin-button{height:auto}[type=search]{-webkit-appearance:textfield;outline-offset:-2px}::-webkit-search-decoration{-webkit-appearance:none}::-webkit-file-upload-button{-webkit-appearance:button;font:inherit}summary{display:list-item}blockquote,dd,dl,figure,h1,h2,h3,h4,h5,h6,hr,p,pre{margin:0}fieldset{margin:0}fieldset,legend{padding:0}menu,ol,ul{list-style:none;margin:0;padding:0}dialog{padding:0}textarea{resize:vertical}input::-moz-placeholder,textarea::-moz-placeholder{opacity:1;color:#9ca3af}input::placeholder,textarea::placeholder{opacity:1;color:#9ca3af}[role=button],button{cursor:pointer}:disabled{cursor:default}audio,canvas,embed,iframe,img,object,svg,video{display:block;vertical-align:middle}img,video{max-width:100%;height:auto}[hidden]:where(:not([hidden=until-found])){display:none}.visible{visibility:visible}.fixed{position:fixed}.absolute{position:absolute}.relative{position:relative}.inset-x-0{left:0;right:0}.bottom-6{bottom:1.5rem}.left-6{left:1.5rem}.top-0{top:0}.z-40{z-index:40}.z-50{z-index:50}.mx-auto{margin-left:auto;margin-right:auto}.mb-11{margin-bottom:2.75rem}.mb-4{margin-bottom:1rem}.mb-7{margin-bottom:1.75rem}.mb-9{margin-bottom:2.25rem}.ml-1{margin-left:.25rem}.mt-11{margin-top:2.75rem}.mt-12{margin-top:3rem}.mt-14{margin-top:3.5rem}.mt-2{margin-top:.5rem}.mt-20{margin-top:5rem}.mt-3{margin-top:.75rem}.mt-4{margin-top:1rem}.mt-5{margin-top:1.25rem}.mt-6{margin-top:1.5rem}.mt-7{margin-top:1.75rem}.mt-8{margin-top:2rem}.mt-9{margin-top:2.25rem}.inline-block{display:inline-block}.flex{display:flex}.inline-flex{display:inline-flex}.table{display:table}.grid{display:grid}.hidden{display:none}.h-10{height:2.5rem}.h-16{height:4rem}.h-8{height:2rem}.h-\[15px\]{height:15px}.h-\[18px\]{height:18px}.h-px{height:1px}.w-10{width:2.5rem}.w-20{width:5rem}.w-8{width:2rem}.w-\[15px\]{width:15px}.w-\[18px\]{width:18px}.max-w-content{max-width:46rem}.max-w-xl{max-width:36rem}.flex-1{flex:1 1 0%}.shrink-0{flex-shrink:0}.transform{transform:translate(var(--tw-translate-x),var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}.scroll-mt-24{scroll-margin-top:6rem}.grid-cols-2{grid-template-columns:repeat(2,minmax(0,1fr))}.flex-col{flex-direction:column}.flex-wrap{flex-wrap:wrap}.items-center{align-items:center}.items-baseline{align-items:baseline}.justify-center{justify-content:center}.justify-between{justify-content:space-between}.gap-1{gap:.25rem}.gap-1\.5{gap:.375rem}.gap-2{gap:.5rem}.gap-3{gap:.75rem}.gap-4{gap:1rem}.gap-5{gap:1.25rem}.gap-8{gap:2rem}.gap-x-4{-moz-column-gap:1rem;column-gap:1rem}.gap-x-6{-moz-column-gap:1.5rem;column-gap:1.5rem}.gap-y-1{row-gap:.25rem}.gap-y-2{row-gap:.5rem}.gap-y-8{row-gap:2rem}.space-y-12>:not([hidden])~:not([hidden]){--tw-space-y-reverse:0;margin-top:calc(3rem*(1 - var(--tw-space-y-reverse)));margin-bottom:calc(3rem*var(--tw-space-y-reverse))}.space-y-14>:not([hidden])~:not([hidden]){--tw-space-y-reverse:0;margin-top:calc(3.5rem*(1 - var(--tw-space-y-reverse)));margin-bottom:calc(3.5rem*var(--tw-space-y-reverse))}.space-y-4>:not([hidden])~:not([hidden]){--tw-space-y-reverse:0;margin-top:calc(1rem*(1 - var(--tw-space-y-reverse)));margin-bottom:calc(1rem*var(--tw-space-y-reverse))}.space-y-6>:not([hidden])~:not([hidden]){--tw-space-y-reverse:0;margin-top:calc(1.5rem*(1 - var(--tw-space-y-reverse)));margin-bottom:calc(1.5rem*var(--tw-space-y-reverse))}.scroll-smooth{scroll-behavior:smooth}.truncate{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.rounded-full{border-radius:9999px}.border{border-width:1px}.border-b{border-bottom-width:1px}.border-l-2{border-left-width:2px}.border-t{border-top-width:1px}.border-accent{--tw-border-opacity:1;border-color:rgb(180 71 47/var(--tw-border-opacity,1))}.border-ink{--tw-border-opacity:1;border-color:rgb(27 27 25/var(--tw-border-opacity,1))}.border-ink\/25{border-color:rgba(27,27,25,.25)}.border-line{--tw-border-opacity:1;border-color:rgb(232 228 220/var(--tw-border-opacity,1))}.border-nightInk{--tw-border-opacity:1;border-color:rgb(237 234 228/var(--tw-border-opacity,1))}.bg-line{--tw-bg-opacity:1;background-color:rgb(232 228 220/var(--tw-bg-opacity,1))}.bg-night{--tw-bg-opacity:1;background-color:rgb(17 17 16/var(--tw-bg-opacity,1))}.bg-paper{--tw-bg-opacity:1;background-color:rgb(250 249 246/var(--tw-bg-opacity,1))}.bg-paper\/70{background-color:hsla(45,29%,97%,.7)}.px-3{padding-left:.75rem;padding-right:.75rem}.px-6{padding-left:1.5rem;padding-right:1.5rem}.py-0{padding-top:0;padding-bottom:0}.py-0\.5{padding-top:.125rem;padding-bottom:.125rem}.py-10{padding-top:2.5rem;padding-bottom:2.5rem}.py-5{padding-top:1.25rem;padding-bottom:1.25rem}.py-6{padding-top:1.5rem;padding-bottom:1.5rem}.pb-0{padding-bottom:0}.pb-0\.5{padding-bottom:.125rem}.pb-24{padding-bottom:6rem}.pb-28{padding-bottom:7rem}.pl-6{padding-left:1.5rem}.pt-10{padding-top:2.5rem}.pt-32{padding-top:8rem}.pt-40{padding-top:10rem}.pt-8{padding-top:2rem}.font-sans{font-family:Noto Sans SC,PingFang SC,Microsoft YaHei,微软雅黑,Source Han Sans SC,Noto Sans CJK SC,system-ui,-apple-system,sans-serif}.font-serif{font-family:"Noto Serif SC",Songti SC,STSong,SimSun,宋体,"Source Han Serif SC","Noto Serif CJK SC",Georgia,serif}.text-\[1\.15rem\]{font-size:1.15rem}.text-\[1\.6rem\]{font-size:1.6rem}.text-\[1\.7rem\]{font-size:1.7rem}.text-\[1\.9rem\]{font-size:1.9rem}.text-\[10px\]{font-size:10px}.text-\[11\.5px\]{font-size:11.5px}.text-\[11px\]{font-size:11px}.text-\[12\.5px\]{font-size:12.5px}.text-\[12px\]{font-size:12px}.text-\[13\.5px\]{font-size:13.5px}.text-\[13px\]{font-size:13px}.text-\[14\.5px\]{font-size:14.5px}.text-\[15px\]{font-size:15px}.text-\[1rem\]{font-size:1rem}.text-lg{font-size:1.125rem;line-height:1.75rem}.text-sm{font-size:.875rem;line-height:1.25rem}.text-xl{font-size:1.25rem;line-height:1.75rem}.font-light{font-weight:300}.font-medium{font-weight:500}.tabular-nums{--tw-numeric-spacing:tabular-nums;font-variant-numeric:var(--tw-ordinal) var(--tw-slashed-zero) var(--tw-numeric-figure) var(--tw-numeric-spacing) var(--tw-numeric-fraction)}.leading-\[1\.55\]{line-height:1.55}.leading-\[1\.95\]{line-height:1.95}.leading-\[1\.9\]{line-height:1.9}.leading-\[2\.1\]{line-height:2.1}.leading-\[2\]{line-height:2}.leading-relaxed{line-height:1.625}.leading-snug{line-height:1.375}.tracking-\[0\.08em\]{letter-spacing:.08em}.tracking-\[0\.12em\]{letter-spacing:.12em}.tracking-\[0\.18em\]{letter-spacing:.18em}.tracking-\[0\.32em\]{letter-spacing:.32em}.tracking-\[0\.3em\]{letter-spacing:.3em}.tracking-\[0\.42em\]{letter-spacing:.42em}.tracking-tight{letter-spacing:-.025em}.tracking-wide{letter-spacing:.025em}.tracking-wider{letter-spacing:.05em}.text-accent{--tw-text-opacity:1;color:rgb(180 71 47/var(--tw-text-opacity,1))}.text-accent\/90{color:rgba(180,71,47,.9)}.text-ink{--tw-text-opacity:1;color:rgb(27 27 25/var(--tw-text-opacity,1))}.text-line{--tw-text-opacity:1;color:rgb(232 228 220/var(--tw-text-opacity,1))}.text-muted{--tw-text-opacity:1;color:rgb(110 106 99/var(--tw-text-opacity,1))}.underline{text-decoration-line:underline}.decoration-accent{text-decoration-color:#b4472f}.decoration-accent\/30{text-decoration-color:rgba(180,71,47,.3)}.decoration-1{text-decoration-thickness:1px}.underline-offset-\[6px\]{text-underline-offset:6px}.antialiased{-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale}.outline{outline-style:solid}.blur{--tw-blur:blur(8px)}.blur,.filter{filter:var(--tw-blur) var(--tw-brightness) var(--tw-contrast) var(--tw-grayscale) var(--tw-hue-rotate) var(--tw-invert) var(--tw-saturate) var(--tw-sepia) var(--tw-drop-shadow)}.backdrop-blur{--tw-backdrop-blur:blur(8px)}.backdrop-blur,.backdrop-filter{-webkit-backdrop-filter:var(--tw-backdrop-blur) var(--tw-backdrop-brightness) var(--tw-backdrop-contrast) var(--tw-backdrop-grayscale) var(--tw-backdrop-hue-rotate) var(--tw-backdrop-invert) var(--tw-backdrop-opacity) var(--tw-backdrop-saturate) var(--tw-backdrop-sepia);backdrop-filter:var(--tw-backdrop-blur) var(--tw-backdrop-brightness) var(--tw-backdrop-contrast) var(--tw-backdrop-grayscale) var(--tw-backdrop-hue-rotate) var(--tw-backdrop-invert) var(--tw-backdrop-opacity) var(--tw-backdrop-saturate) var(--tw-backdrop-sepia)}.transition{transition-property:color,background-color,border-color,text-decoration-color,fill,stroke,opacity,box-shadow,transform,filter,-webkit-backdrop-filter;transition-property:color,background-color,border-color,text-decoration-color,fill,stroke,opacity,box-shadow,transform,filter,backdrop-filter;transition-property:color,background-color,border-color,text-decoration-color,fill,stroke,opacity,box-shadow,transform,filter,backdrop-filter,-webkit-backdrop-filter;transition-timing-function:cubic-bezier(.4,0,.2,1);transition-duration:.15s}.transition-colors{transition-property:color,background-color,border-color,text-decoration-color,fill,stroke;transition-timing-function:cubic-bezier(.4,0,.2,1);transition-duration:.15s}.transition-opacity{transition-property:opacity;transition-timing-function:cubic-bezier(.4,0,.2,1);transition-duration:.15s}.transition-transform{transition-property:transform;transition-timing-function:cubic-bezier(.4,0,.2,1);transition-duration:.15s}.duration-300{transition-duration:.3s}.ease-in-out{transition-timing-function:cubic-bezier(.4,0,.2,1)}.hover\:border-accent:hover{--tw-border-opacity:1;border-color:rgb(180 71 47/var(--tw-border-opacity,1))}.hover\:text-accent:hover{--tw-text-opacity:1;color:rgb(180 71 47/var(--tw-text-opacity,1))}.hover\:text-ink:hover{--tw-text-opacity:1;color:rgb(27 27 25/var(--tw-text-opacity,1))}.hover\:decoration-accent:hover{text-decoration-color:#b4472f}.hover\:opacity-60:hover{opacity:.6}.hover\:opacity-65:hover{opacity:.65}.group:hover .group-hover\:-translate-x-1{--tw-translate-x:-0.25rem}.group:hover .group-hover\:-translate-x-1,.group:hover .group-hover\:translate-x-1{transform:translate(var(--tw-translate-x),var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}.group:hover .group-hover\:translate-x-1{--tw-translate-x:0.25rem}.dark\:border-nightInk\/25:is(.dark *){border-color:hsla(40,20%,91%,.25)}.dark\:border-nightLine:is(.dark *){--tw-border-opacity:1;border-color:rgb(43 42 39/var(--tw-border-opacity,1))}.dark\:bg-night:is(.dark *){--tw-bg-opacity:1;background-color:rgb(17 17 16/var(--tw-bg-opacity,1))}.dark\:bg-night\/70:is(.dark *){background-color:rgba(17,17,16,.7)}.dark\:bg-nightLine:is(.dark *){--tw-bg-opacity:1;background-color:rgb(43 42 39/var(--tw-bg-opacity,1))}.dark\:text-nightInk:is(.dark *){--tw-text-opacity:1;color:rgb(237 234 228/var(--tw-text-opacity,1))}.dark\:text-nightLine:is(.dark *){--tw-text-opacity:1;color:rgb(43 42 39/var(--tw-text-opacity,1))}.dark\:text-nightMuted:is(.dark *){--tw-text-opacity:1;color:rgb(146 142 134/var(--tw-text-opacity,1))}.dark\:hover\:text-accent:hover:is(.dark *){--tw-text-opacity:1;color:rgb(180 71 47/var(--tw-text-opacity,1))}.dark\:hover\:text-nightInk:hover:is(.dark *){--tw-text-opacity:1;color:rgb(237 234 228/var(--tw-text-opacity,1))}@media (min-width:640px){.sm\:block{display:block}.sm\:hidden{display:none}.sm\:w-24{width:6rem}.sm\:grid-cols-4{grid-template-columns:repeat(4,minmax(0,1fr))}.sm\:flex-row{flex-direction:row}.sm\:items-center{align-items:center}.sm\:justify-between{justify-content:space-between}.sm\:gap-6{gap:1.5rem}.sm\:gap-7{gap:1.75rem}.sm\:pb-32{padding-bottom:8rem}.sm\:pt-52{padding-top:13rem}.sm\:text-\[1\.1rem\]{font-size:1.1rem}.sm\:text-\[1\.95rem\]{font-size:1.95rem}.sm\:text-\[2\.6rem\]{font-size:2.6rem}.sm\:text-\[2rem\]{font-size:2rem}.sm\:leading-\[1\.45\]{line-height:1.45}}</style>
+<!-- TW:END -->
+
+<script>
+  // 提前应用主题，避免闪烁
+  (function () {
+    try {
+      var stored = localStorage.getItem('theme');
+      var dark = stored ? stored === 'dark'
+                        : window.matchMedia('(prefers-color-scheme: dark)').matches;
+      if (dark) document.documentElement.classList.add('dark');
+    } catch (e) {}
+  })();
+</script>
+
+<style>
+  html { -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility; }
+
+  body { transition: background-color .45s ease, color .45s ease; }
+
+  /* ---------- 顶部导航 ---------- */
+  #nav {
+    background: transparent;
+    border-bottom: 1px solid transparent;
+    transition: background-color .35s ease, border-color .35s ease, backdrop-filter .35s ease;
+  }
+  #nav.is-scrolled {
+    background: rgba(250, 249, 246, .82);
+    -webkit-backdrop-filter: saturate(180%) blur(14px);
+    backdrop-filter: saturate(180%) blur(14px);
+    border-bottom-color: #E8E4DC;
+  }
+  html.dark #nav.is-scrolled {
+    background: rgba(17, 17, 16, .82);
+    border-bottom-color: #2B2A27;
+  }
+
+  /* ---------- 导航链接下划线 ---------- */
+  .navlink { position: relative; }
+  .navlink::after {
+    content: '';
+    position: absolute;
+    left: 0; bottom: -5px;
+    width: 0; height: 1px;
+    background: currentColor;
+    transition: width .32s cubic-bezier(.4, 0, .2, 1);
+  }
+  .navlink:hover::after,
+  .navlink.active::after { width: 100%; }
+
+  /* ---------- 滚动淡入 ---------- */
+  .reveal {
+    opacity: 0;
+    transform: translateY(18px);
+    transition: opacity .85s cubic-bezier(.22,.61,.36,1),
+                transform .85s cubic-bezier(.22,.61,.36,1);
+  }
+  .reveal.visible { opacity: 1; transform: none; }
+
+  @media (prefers-reduced-motion: reduce) {
+    .reveal { opacity: 1; transform: none; transition: none; }
+    html { scroll-behavior: auto; }
+  }
+
+  /* ---------- 选中色 ---------- */
+  ::selection { background: #B4472F; color: #fff; }
+
+  /* ---------- 作品条目的左侧竖线动画 ---------- */
+  .work-item::before {
+    content: '';
+    position: absolute;
+    left: -1.5rem; top: .35rem; bottom: .35rem;
+    width: 1px;
+    background: #B4472F;
+    transform: scaleY(0);
+    transform-origin: top;
+    transition: transform .45s cubic-bezier(.22,.61,.36,1);
+  }
+  .work-item:hover::before { transform: scaleY(1); }
+
+  /* ---------- 文章行 ---------- */
+  .note-row .arrow {
+    opacity: 0;
+    transform: translateX(-6px);
+    transition: opacity .3s ease, transform .3s ease;
+  }
+  .note-row:hover .arrow { opacity: 1; transform: translateX(0); }
+  .note-row:hover .note-title { color: #B4472F; }
+  .note-title { transition: color .3s ease; }
+
+  /* ---------- 主题图标 ---------- */
+  .theme-sun, .theme-moon { transition: opacity .3s ease, transform .4s ease; }
+  html.dark .theme-sun  { display: none; }
+  html:not(.dark) .theme-moon { display: none; }
+
+  /* ---------- 滚动条 ---------- */
+  ::-webkit-scrollbar { width: 9px; height: 9px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: #D8D3C9; border-radius: 9999px; }
+  html.dark ::-webkit-scrollbar-thumb { background: #33322E; }
+
+  /* ================= 阅读页 / 音乐页 顶栏 ================= */
+  .reader-bar {
+    background: rgba(250, 249, 246, .9);
+    -webkit-backdrop-filter: saturate(180%) blur(14px);
+    backdrop-filter: saturate(180%) blur(14px);
+  }
+  html.dark .reader-bar { background: rgba(17, 17, 16, .9); }
+
+  /* ---------- 正文排版 ---------- */
+  .prose-reader {
+    font-size: 16.5px;
+    line-height: 2.1;
+    font-weight: 300;
+    letter-spacing: .01em;
+    color: #26251F;
+  }
+  html.dark .prose-reader { color: #E2DFD8; }
+
+  /* 段落：默认顶格，不自动缩进。
+     只有原文里段落开头写了全角空格（程序会加 .is-indent），才缩进两字。 */
+  .prose-reader p { margin: 0 0 1.25em; text-indent: 0; }
+  .prose-reader p.is-indent { text-indent: 2em; }
+  .prose-reader p:last-child { margin-bottom: 0; }
+
+  .prose-reader h2,
+  .prose-reader h3,
+  .prose-reader h4 {
+    margin: 2.2em 0 1em;
+    text-indent: 0;
+    font-family: "Noto Serif SC", "Songti SC", "STSong", "SimSun", 宋体,
+                 "Source Han Serif SC", "Noto Serif CJK SC", Georgia, serif;
+    font-weight: 500;
+    line-height: 1.7;
+  }
+  .prose-reader h2 { font-size: 1.14em; }
+  .prose-reader h3 { font-size: 1.05em; }
+  .prose-reader h4 { font-size: 1em; color: #6E6A63; }
+  html.dark .prose-reader h4 { color: #928E86; }
+  .prose-reader h2:first-child,
+  .prose-reader h3:first-child,
+  .prose-reader h4:first-child { margin-top: 0; }
+
+  .prose-reader blockquote {
+    margin: 1.6em 0;
+    padding-left: 1.1em;
+    border-left: 2px solid #B4472F;
+    color: #6E6A63;
+    text-indent: 0;
+  }
+  html.dark .prose-reader blockquote { color: #928E86; }
+
+  /* 场景分隔线 */
+  .prose-reader hr.scene-break {
+    margin: 2.4em auto;
+    width: 42%;
+    border: 0;
+    border-top: 1px solid #E8E4DC;
+  }
+  html.dark .prose-reader hr.scene-break { border-top-color: #2B2A27; }
+
+  @media (min-width: 640px) {
+    .prose-reader { font-size: 17px; }
+  }
+
+  /* ================= 左下角的小音符 ================= */
+  @keyframes noteFloat {
+    0%, 100% { transform: translateY(0); }
+    50%      { transform: translateY(-4px); }
+  }
+  .music-note {
+    animation: noteFloat 3.8s ease-in-out infinite;
+    transition: opacity .35s ease, border-color .3s ease, color .3s ease;
+  }
+  .music-note:hover { animation-play-state: paused; }
+  .music-note.is-hidden { opacity: 0; pointer-events: none; }
+
+  /* ================= 音乐页入场 ================= */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(14px); }
+    to   { opacity: 1; transform: none; }
+  }
+  .music-in { animation: fadeUp .8s cubic-bezier(.22,.61,.36,1) both; }
+  .music-in.d1 { animation-delay: .08s; }
+  .music-in.d2 { animation-delay: .16s; }
+  .music-in.d3 { animation-delay: .24s; }
+  .music-in.d4 { animation-delay: .32s; }
+
+  /* ================= 音乐页 · 歌单列表 ================= */
+  .songlist { border-top: 1px solid #E8E4DC; }
+  html.dark .songlist { border-top-color: #2B2A27; }
+
+  .song-row {
+    display: flex;
+    align-items: baseline;
+    gap: 14px;
+    padding: 11px 4px;
+    border-bottom: 1px solid #E8E4DC;
+    color: inherit;
+    text-decoration: none;
+    -webkit-tap-highlight-color: transparent;
+    transition: color .25s ease, padding-left .25s ease, background-color .25s ease;
+  }
+  html.dark .song-row { border-bottom-color: #2B2A27; }
+  .song-row:focus-visible { outline: 2px solid #B4472F; outline-offset: 2px; }
+
+  /* 悬停位移只在鼠标设备上给：触屏的 :hover 按下后不会消失，会一直歪着 */
+  @media (hover: hover) {
+    .song-row:hover { color: #B4472F; padding-left: 12px; }
+  }
+  /* 触屏改用按下时的整行高亮 */
+  @media (hover: none) {
+    .song-row:active {
+      color: #B4472F;
+      background-color: rgba(180, 71, 47, .07);
+    }
+  }
+
+  .song-idx {
+    flex: none;
+    width: 2.1em;
+    font-size: 11px;
+    letter-spacing: .06em;
+    color: #6E6A63;
+    font-variant-numeric: tabular-nums;
+  }
+  html.dark .song-idx { color: #928E86; }
+
+  .song-title {
+    flex: 1 1 auto;
+    min-width: 0;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    font-size: 14.5px;
+    font-weight: 300;
+  }
+
+  .song-artist {
+    flex: 0 1 auto;
+    max-width: 42%;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    font-size: 12.5px;
+    color: #6E6A63;
+  }
+  html.dark .song-artist { color: #928E86; }
+
+  .song-go {
+    flex: none;
+    align-self: center;
+    font-size: 11px;
+    opacity: 0;
+    transition: opacity .25s ease;
+  }
+  @media (hover: hover) {
+    .song-row:hover .song-go { opacity: .75; }
+  }
+  /* 触屏没有悬停，箭头常驻，不然这行永远看不到它 */
+  @media (hover: none) {
+    .song-go { opacity: .45; }
+  }
+  .song-row:focus-visible .song-go { opacity: .75; }
+
+  /* ---------- 翻页控件 ---------- */
+  .pager {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 6px;
+    margin-top: 20px;
+  }
+  .pager-btn {
+    min-width: 30px;
+    height: 30px;
+    padding: 0 10px;
+    border: 1px solid #E8E4DC;
+    border-radius: 8px;
+    background: transparent;
+    color: #6E6A63;
+    font-family: inherit;
+    font-size: 12.5px;
+    line-height: 1;
+    cursor: pointer;
+    transition: border-color .25s ease, color .25s ease;
+  }
+  html.dark .pager-btn { border-color: #2B2A27; color: #928E86; }
+  .pager-btn:hover:not(:disabled):not([aria-current]) { border-color: #B4472F; color: #B4472F; }
+  .pager-btn[aria-current] { border-color: #B4472F; color: #B4472F; cursor: default; }
+  .pager-btn:disabled { opacity: .35; cursor: default; }
+  .pager-dots { padding: 0 2px; font-size: 12px; color: #6E6A63; }
+  html.dark .pager-dots { color: #928E86; }
+  .pager-info {
+    margin-left: auto;
+    font-size: 11.5px;
+    letter-spacing: .06em;
+    color: #6E6A63;
+  }
+  html.dark .pager-info { color: #928E86; }
+
+  /* ---------- 手机：曲名和作者改成上下两行，别都挤在一行里截断 ---------- */
+  @media (max-width: 639px) {
+    .song-row {
+      display: grid;
+      grid-template-columns: auto 1fr auto;
+      column-gap: 10px;
+      row-gap: 3px;
+      padding: 13px 4px;
+    }
+    .song-idx    { grid-column: 1; grid-row: 1 / span 2; width: auto; }
+    .song-title  { grid-column: 2; grid-row: 1; white-space: normal; }
+    .song-artist { grid-column: 2; grid-row: 2; max-width: none; white-space: normal; font-size: 11.5px; }
+    .song-go     { grid-column: 3; grid-row: 1 / span 2; }
+
+    /* 最多两行曲名、一行作者，再长就省略号 */
+    .song-title,
+    .song-artist {
+      display: -webkit-box;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .song-title  { -webkit-line-clamp: 2; line-clamp: 2; }
+    .song-artist { -webkit-line-clamp: 1; line-clamp: 1; }
+
+    .pager-info { margin-left: 0; width: 100%; padding-top: 4px; }
+  }
+
+  /* 触屏设备把翻页按钮撑到手指点得中的尺寸 */
+  @media (pointer: coarse) {
+    .pager { gap: 8px; }
+    .pager-btn { min-width: 38px; height: 38px; padding: 0 12px; font-size: 13px; }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .music-note { animation: none; }
+    .music-in { animation: none; }
+  }
+</style>
+</head>
+
+<body class="bg-paper text-ink dark:bg-night dark:text-nightInk font-sans antialiased">
+
+<!-- ============================================================
+     首页
+     ============================================================ -->
+<div id="home">
+
+  <!-- ===== 左下角的小音符（点进去是音乐页） ===== -->
+  <a id="musicNote" href="#/music" title="music" aria-label="音乐"
+     class="music-note fixed bottom-6 left-6 z-40 flex h-10 w-10 items-center justify-center rounded-full border border-line bg-paper/70 text-muted backdrop-blur transition-colors hover:border-accent hover:text-accent dark:border-nightLine dark:bg-night/70 dark:text-nightMuted">
+    <svg class="h-[18px] w-[18px]" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+         stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M9 18V5l12-2v13" />
+      <circle cx="6" cy="18" r="3" />
+      <circle cx="18" cy="16" r="3" />
+    </svg>
+  </a>
+
+  <!-- ================= 顶部导航 ================= -->
+  <header id="nav" class="fixed inset-x-0 top-0 z-50">
+    <div class="mx-auto flex h-16 max-w-content items-center justify-between px-6">
+      <a href="#top" class="font-serif text-lg tracking-[0.08em] transition-opacity hover:opacity-60">TickSpring</a>
+
+      <nav class="flex items-center gap-5 text-[13px] sm:gap-7">
+        <a href="#about"      class="navlink text-muted dark:text-nightMuted transition-colors hover:text-ink dark:hover:text-nightInk">关于</a>
+        <a href="#novel"      class="navlink text-muted dark:text-nightMuted transition-colors hover:text-ink dark:hover:text-nightInk">小说</a>
+        <a href="#philosophy" class="navlink text-muted dark:text-nightMuted transition-colors hover:text-ink dark:hover:text-nightInk">哲学</a>
+        <a href="#contact"    class="navlink text-muted dark:text-nightMuted transition-colors hover:text-ink dark:hover:text-nightInk">联系</a>
+
+        <button type="button" aria-label="切换主题"
+                class="js-theme-toggle ml-1 flex h-8 w-8 items-center justify-center rounded-full border border-line text-muted transition-colors hover:border-accent hover:text-accent dark:border-nightLine dark:text-nightMuted">
+          <svg class="theme-sun h-[15px] w-[15px]" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+               stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="4.2" />
+            <path d="M12 2.4v2.1M12 19.5v2.1M4.2 12H2.1M21.9 12h-2.1M6.3 6.3 4.8 4.8M19.2 19.2l-1.5-1.5M17.7 6.3l1.5-1.5M4.8 19.2l1.5-1.5" />
+          </svg>
+          <svg class="theme-moon h-[15px] w-[15px]" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+               stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
+          </svg>
+        </button>
+      </nav>
+    </div>
+  </header>
+
+  <!-- ================= Hero ================= -->
+  <section id="top" class="scroll-mt-24 pt-40 pb-24 sm:pt-52 sm:pb-32">
+    <div class="mx-auto max-w-content px-6">
+      <p class="reveal mb-7 text-[11px] tracking-[0.42em] text-muted dark:text-nightMuted">
+        LIGHT NOVEL &nbsp;/&nbsp; PHILOSOPHY
+      </p>
+
+      <h1 class="reveal font-serif text-[1.9rem] font-medium leading-[1.55] tracking-tight sm:text-[2.6rem] sm:leading-[1.45]">
+        在虚构与思辨之间，<br class="hidden sm:block" />写下诚实的句子。
+      </h1>
+
+      <p class="reveal mt-9 max-w-xl text-[15px] font-light leading-[2] text-muted dark:text-nightMuted">
+        写作是灵魂浮现的窗口。<br />
+        我是 TickSpring。写小说，也写一些算不上论文的哲学笔记。<br />
+      </p>
+
+      <div class="reveal mt-11 flex flex-wrap items-center gap-8 text-sm">
+        <a href="#novel"
+           class="border-b border-ink/25 pb-0.5 transition-colors hover:border-accent hover:text-accent dark:border-nightInk/25">
+          阅读作品
+        </a>
+        <a href="#philosophy"
+           class="group inline-flex items-center gap-1.5 text-muted transition-colors hover:text-accent dark:text-nightMuted dark:hover:text-accent">
+          哲学笔记
+          <span class="inline-block transition-transform duration-300 group-hover:translate-x-1">→</span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= 关于 ================= -->
+  <section id="about" class="scroll-mt-24 pb-24 sm:pb-32">
+    <div class="mx-auto max-w-content px-6">
+
+      <div class="reveal mb-11 flex items-center gap-4">
+        <h2 class="font-serif text-xl tracking-wide">关于</h2>
+        <span class="h-px flex-1 bg-line dark:bg-nightLine"></span>
+        <span class="text-[10px] tracking-[0.3em] text-muted dark:text-nightMuted">ABOUT</span>
+      </div>
+
+      <div class="reveal space-y-6 text-[15px] font-light leading-[2] text-muted dark:text-nightMuted">
+        <p>
+          白天是普通人，晚上是写字的人。写故事最初是为了给自己找一个能待着的地方，
+          后来发现那些虚构的人物替我承担了很多我承担不了的东西。
+        </p>
+        <p>
+          哲学笔记则是另一种诚实——在小说里我可以躲进比喻，但在笔记里不行，
+          必须把话说清楚，哪怕最后得到一个「我也还不确定」的结论。
+        </p>
+        <p>
+          这里会放我的轻小说连载、短篇，以及零散的哲学随笔。更新不快，可能咕咕。
+        </p>
+      </div>
+
+      <dl class="reveal mt-14 grid grid-cols-2 gap-x-6 gap-y-8 border-t border-line pt-10 sm:grid-cols-4 dark:border-nightLine">
+        <div>
+          <dt class="text-[11px] tracking-[0.18em] text-muted dark:text-nightMuted">身份</dt>
+          <dd class="mt-2 font-serif text-[15px]">写作者</dd>
+        </div>
+        <div>
+          <dt class="text-[11px] tracking-[0.18em] text-muted dark:text-nightMuted">在写</dt>
+          <dd class="mt-2 font-serif text-[15px]">3 部作品</dd>
+        </div>
+        <div>
+          <dt class="text-[11px] tracking-[0.18em] text-muted dark:text-nightMuted">笔记</dt>
+          <dd class="mt-2 font-serif text-[15px]">5 篇</dd>
+        </div>
+        <div>
+          <dt class="text-[11px] tracking-[0.18em] text-muted dark:text-nightMuted">更新</dt>
+          <dd class="mt-2 font-serif text-[15px]">不定期</dd>
+        </div>
+      </dl>
+    </div>
+  </section>
+
+  <!-- ================= 小说 ================= -->
+  <section id="novel" class="scroll-mt-24 pb-24 sm:pb-32">
+    <div class="mx-auto max-w-content px-6">
+
+      <div class="reveal mb-11 flex items-center gap-4">
+        <h2 class="font-serif text-xl tracking-wide">小说</h2>
+        <span class="h-px flex-1 bg-line dark:bg-nightLine"></span>
+        <span class="text-[10px] tracking-[0.3em] text-muted dark:text-nightMuted">NOVEL</span>
+      </div>
+
+      <div class="space-y-14">
+
+        <!-- 作品 1
+             data-work-id="qu" 是这部的内部编号，
+             底部正文区里对应章节的 data-work-id 必须和它一致 -->
+        <article class="reveal work-item relative" data-work-id="qu">
+          <div class="flex flex-wrap items-baseline justify-between gap-x-6 gap-y-2">
+            <h3 class="font-serif text-[1.15rem] tracking-wide">《驱灵师》</h3>
+            <span class="text-[11px] tracking-[0.12em] text-muted dark:text-nightMuted">连载中 · 2.9 万字</span>
+          </div>
+          <p class="mt-4 text-[14.5px] font-light leading-[1.95] text-muted dark:text-nightMuted">
+            魔法师可以成为驱灵师吗？故事的开始，是浮光跃金的深秋。
+          </p>
+          <div class="mt-5 flex flex-wrap items-center gap-2">
+            <span class="rounded-full border border-line px-3 py-0.5 text-[11px] text-muted dark:border-nightLine dark:text-nightMuted">校园</span>
+            <span class="rounded-full border border-line px-3 py-0.5 text-[11px] text-muted dark:border-nightLine dark:text-nightMuted">奇幻</span>
+            <span class="rounded-full border border-line px-3 py-0.5 text-[11px] text-muted dark:border-nightLine dark:text-nightMuted">治愈</span>
+          </div>
+          <a href="#/read/qu" class="mt-5 inline-block text-[13px] text-accent/90 transition-opacity hover:opacity-65">阅读章节 →</a>
+        </article>
+
+        <!-- 作品 2 -->
+        <article class="reveal work-item relative" data-work-id="pian">
+          <div class="flex flex-wrap items-baseline justify-between gap-x-6 gap-y-2">
+            <h3 class="font-serif text-[1.15rem] tracking-wide">《片段》</h3>
+            <span class="text-[11px] tracking-[0.12em] text-muted dark:text-nightMuted">已完结 · 短篇集 6 篇</span>
+          </div>
+          <p class="mt-4 text-[14.5px] font-light leading-[1.95] text-muted dark:text-nightMuted">
+            六则关于「漫游」的故事。他们不拯救世界，只是自由的游荡。
+          </p>
+          <div class="mt-5 flex flex-wrap items-center gap-2">
+            <span class="rounded-full border border-line px-3 py-0.5 text-[11px] text-muted dark:border-nightLine dark:text-nightMuted">短篇</span>
+            <span class="rounded-full border border-line px-3 py-0.5 text-[11px] text-muted dark:border-nightLine dark:text-nightMuted">HP</span>
+            <span class="rounded-full border border-line px-3 py-0.5 text-[11px] text-muted dark:border-nightLine dark:text-nightMuted">群像</span>
+          </div>
+          <a href="#/read/pian" class="mt-5 inline-block text-[13px] text-accent/90 transition-opacity hover:opacity-65">阅读章节 →</a>
+        </article>
+
+        <!-- 作品 3 -->
+        <article class="reveal work-item relative" data-work-id="her">
+          <div class="flex flex-wrap items-baseline justify-between gap-x-6 gap-y-2">
+            <h3 class="font-serif text-[1.15rem] tracking-wide">《赫尔加探案集》</h3>
+            <span class="text-[11px] tracking-[0.12em] text-muted dark:text-nightMuted">连载中 · 1.1 万字</span>
+          </div>
+          <p class="mt-4 text-[14.5px] font-light leading-[1.95] text-muted dark:text-nightMuted">
+            神奇动物学家和他的法律挂件探案的故事
+          </p>
+          <div class="mt-5 flex flex-wrap items-center gap-2">
+            <span class="rounded-full border border-line px-3 py-0.5 text-[11px] text-muted dark:border-nightLine dark:text-nightMuted">魔法世界</span>
+            <span class="rounded-full border border-line px-3 py-0.5 text-[11px] text-muted dark:border-nightLine dark:text-nightMuted">轻喜剧</span>
+            <span class="rounded-full border border-line px-3 py-0.5 text-[11px] text-muted dark:border-nightLine dark:text-nightMuted">设定系</span>
+          </div>
+          <a href="#/read/her" class="mt-5 inline-block text-[13px] text-accent/90 transition-opacity hover:opacity-65">阅读章节 →</a>
+        </article>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= 哲学讨论 ================= -->
+  <section id="philosophy" class="scroll-mt-24 pb-24 sm:pb-32">
+    <div class="mx-auto max-w-content px-6">
+
+      <div class="reveal mb-11 flex items-center gap-4">
+        <h2 class="font-serif text-xl tracking-wide">哲学笔记</h2>
+        <span class="h-px flex-1 bg-line dark:bg-nightLine"></span>
+        <span class="text-[10px] tracking-[0.3em] text-muted dark:text-nightMuted">PHILOSOPHY</span>
+      </div>
+
+      <p class="reveal mb-9 max-w-xl text-[14.5px] font-light leading-[1.95] text-muted dark:text-nightMuted">
+        不是论文，只是把一些想不通的事情写下来。写完之后，通常还是想不通。
+      </p>
+
+      <div class="border-t border-line dark:border-nightLine">
+
+        <a href="#/read/notes/0" class="reveal note-row group flex items-baseline gap-4 border-b border-line py-5 sm:gap-6 dark:border-nightLine">
+          <time class="w-20 shrink-0 text-[11px] tabular-nums tracking-wider text-muted sm:w-24 dark:text-nightMuted">2025.03.14</time>
+          <span class="note-title flex-1 text-[14.5px] font-light leading-relaxed">当我说「我」的时候，我在指什么</span>
+          <span class="arrow text-accent">↗</span>
+        </a>
+
+        <a href="#/read/notes/1" class="reveal note-row group flex items-baseline gap-4 border-b border-line py-5 sm:gap-6 dark:border-nightLine">
+          <time class="w-20 shrink-0 text-[11px] tabular-nums tracking-wider text-muted sm:w-24 dark:text-nightMuted">2025.02.02</time>
+          <span class="note-title flex-1 text-[14.5px] font-light leading-relaxed">关于自由的误读：从消极自由到日常练习</span>
+          <span class="arrow text-accent">↗</span>
+        </a>
+
+        <a href="#/read/notes/2" class="reveal note-row group flex items-baseline gap-4 border-b border-line py-5 sm:gap-6 dark:border-nightLine">
+          <time class="w-20 shrink-0 text-[11px] tabular-nums tracking-wider text-muted sm:w-24 dark:text-nightMuted">2025.01.11</time>
+          <span class="note-title flex-1 text-[14.5px] font-light leading-relaxed">语言能说清痛苦吗——文字之外无他物</span>
+          <span class="arrow text-accent">↗</span>
+        </a>
+
+        <a href="#/read/notes/3" class="reveal note-row group flex items-baseline gap-4 border-b border-line py-5 sm:gap-6 dark:border-nightLine">
+          <time class="w-20 shrink-0 text-[11px] tabular-nums tracking-wider text-muted sm:w-24 dark:text-nightMuted">2024.12.09</time>
+          <span class="note-title flex-1 text-[14.5px] font-light leading-relaxed">虚无主义的三种面孔，以及一种温和的回应</span>
+          <span class="arrow text-accent">↗</span>
+        </a>
+
+        <a href="#/read/notes/4" class="reveal note-row group flex items-baseline gap-4 border-b border-line py-5 sm:gap-6 dark:border-nightLine">
+          <time class="w-20 shrink-0 text-[11px] tabular-nums tracking-wider text-muted sm:w-24 dark:text-nightMuted">2024.11.20</time>
+          <span class="note-title flex-1 text-[14.5px] font-light leading-relaxed">为什么我们仍然需要故事：论叙事作为认知工具</span>
+          <span class="arrow text-accent">↗</span>
+        </a>
+
+      </div>
+
+      <div class="reveal mt-9">
+        <a href="#/read/notes" class="text-[13px] text-muted transition-colors hover:text-accent dark:text-nightMuted dark:hover:text-accent">
+          查看全部笔记 →
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= 联系 ================= -->
+  <section id="contact" class="scroll-mt-24 pb-24 sm:pb-32">
+    <div class="mx-auto max-w-content px-6">
+
+      <div class="reveal mb-11 flex items-center gap-4">
+        <h2 class="font-serif text-xl tracking-wide">联系</h2>
+        <span class="h-px flex-1 bg-line dark:bg-nightLine"></span>
+        <span class="text-[10px] tracking-[0.3em] text-muted dark:text-nightMuted">CONTACT</span>
+      </div>
+
+      <p class="reveal text-[14.5px] font-light leading-[1.95] text-muted dark:text-nightMuted">
+        如果你读到了这里，欢迎来信聊聊——关于小说，关于哲学，或者关于今天天气。
+      </p>
+
+      <!-- 邮箱：想加第三个，就复制一整条 <li>…</li> 改地址即可 -->
+      <ul class="reveal mt-8 space-y-4">
+        <li class="flex flex-wrap items-baseline gap-x-4 gap-y-1">
+          <span class="w-20 shrink-0 text-[11px] tracking-[0.18em] text-muted dark:text-nightMuted">Gmail</span>
+          <a href="mailto:helosootistaken@gmail.com"
+             class="font-serif text-[15px] tracking-wide underline decoration-accent/30 decoration-1 underline-offset-[6px] transition-colors hover:text-accent hover:decoration-accent">
+            helosootistaken@gmail.com
+          </a>
+        </li>
+        <li class="flex flex-wrap items-baseline gap-x-4 gap-y-1">
+          <span class="w-20 shrink-0 text-[11px] tracking-[0.18em] text-muted dark:text-nightMuted">Outlook</span>
+          <a href="mailto:TickSpring192@outlook.com"
+             class="font-serif text-[15px] tracking-wide underline decoration-accent/30 decoration-1 underline-offset-[6px] transition-colors hover:text-accent hover:decoration-accent">
+            TickSpring192@outlook.com
+          </a>
+        </li>
+      </ul>
+
+    </div>
+  </section>
+
+  <!-- ================= 页脚 ================= -->
+  <footer class="border-t border-line dark:border-nightLine">
+    <div class="mx-auto flex max-w-content flex-col gap-3 px-6 py-10 text-[11.5px] tracking-wide text-muted sm:flex-row sm:items-center sm:justify-between dark:text-nightMuted">
+      <span>© 2025 TickSpring · 保留所有权利</span>
+      <span>用文字对抗遗忘</span>
+    </div>
+  </footer>
+
+</div><!-- /#home -->
+
+
+<!-- ============================================================
+     音乐页
+     ============================================================ -->
+<div id="music" class="hidden">
+
+  <header class="reader-bar fixed inset-x-0 top-0 z-50 border-b border-line dark:border-nightLine">
+    <div class="mx-auto flex h-16 max-w-content items-center justify-between gap-4 px-6">
+      <a href="#/" class="group inline-flex shrink-0 items-center gap-2 text-[13px] text-muted transition-colors hover:text-accent dark:text-nightMuted dark:hover:text-accent">
+        <span aria-hidden="true" class="transition-transform duration-300 group-hover:-translate-x-1">←</span>
+        返回首页
+      </a>
+
+      <span class="truncate font-serif text-[13px] tracking-[0.08em] text-muted dark:text-nightMuted">音乐</span>
+
+      <button type="button" aria-label="切换主题"
+              class="js-theme-toggle flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-line text-muted transition-colors hover:border-accent hover:text-accent dark:border-nightLine dark:text-nightMuted">
+        <svg class="theme-sun h-[15px] w-[15px]" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+             stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="4.2" />
+          <path d="M12 2.4v2.1M12 19.5v2.1M4.2 12H2.1M21.9 12h-2.1M6.3 6.3 4.8 4.8M19.2 19.2l-1.5-1.5M17.7 6.3l1.5-1.5M4.8 19.2l1.5-1.5" />
+        </svg>
+        <svg class="theme-moon h-[15px] w-[15px]" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+             stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
+        </svg>
+      </button>
+    </div>
+  </header>
+
+  <main class="mx-auto max-w-content px-6 pt-32 pb-28">
+
+    <p class="music-in mb-4 text-[11px] tracking-[0.32em] text-muted dark:text-nightMuted">MUSIC</p>
+    <h1 class="music-in d1 font-serif text-[1.6rem] leading-snug tracking-tight sm:text-[1.95rem]">
+      一个放歌的地方
+    </h1>
+
+    <!-- 那句话 -->
+    <blockquote class="music-in d2 mt-12 border-l-2 border-accent pl-6">
+      <p class="font-serif text-[1rem] leading-[2.1] sm:text-[1.1rem]">
+        恭喜你在你人生最漫游的时候发现了这里，<br />
+        <span class="text-muted dark:text-nightMuted">music so good,even a devil may cry</span>
+      </p>
+    </blockquote>
+
+    <p class="music-in d3 mt-14 text-[14.5px] font-light leading-[1.95] text-muted dark:text-nightMuted">
+      想听的，点歌名直接去平台放
+    </p>
+
+    <!-- 只在手机上显示 -->
+    <p class="music-in d3 mt-3 text-[12.5px] font-light leading-[1.9] text-muted dark:text-nightMuted sm:hidden">
+      手机上点歌名会先试着打开 APP；没装的话会自动落到网页版。
+    </p>
+
+    <div class="music-in d4 mt-12 space-y-12">
+
+      <!-- ===== 歌单 1：QQ 音乐 ===== -->
+      <article class="work-item relative">
+        <div class="flex flex-wrap items-baseline justify-between gap-x-6 gap-y-2">
+          <h2 class="font-serif text-[1.15rem] tracking-wide">我的 QQ 音乐歌单</h2>
+          <span class="text-[11px] tracking-[0.12em] text-muted dark:text-nightMuted">QQ MUSIC</span>
+        </div>
+        <p class="mt-4 text-[14.5px] font-light leading-[1.95] text-muted dark:text-nightMuted">
+          全部纯音乐，从安静的到吵的都有，
+          共 <span class="js-count" data-count="qq">—</span> 首。
+        </p>
+
+        <!-- 歌曲列表由页面底部的脚本按 TS_PLAYLISTS.qq 渲染 -->
+        <div class="songlist mt-7" data-list="qq"></div>
+        <div class="pager" data-pager="qq"></div>
+
+        <p class="mt-6 text-[12.5px] leading-relaxed text-muted dark:text-nightMuted">
+          想收藏整个歌单，
+          <a href="https://c6.y.qq.com/base/fcgi-bin/u?__=csI6fuQmqwVy" target="_blank" rel="noopener"
+             class="text-accent/90 transition-opacity hover:opacity-65">去 QQ 音乐打开 →</a>
+        </p>
+      </article>
+
+      <!-- ===== 歌单 2：网易云音乐 ===== -->
+      <article class="work-item relative">
+        <div class="flex flex-wrap items-baseline justify-between gap-x-6 gap-y-2">
+          <h2 class="font-serif text-[1.15rem] tracking-wide">我的网易云音乐歌单</h2>
+          <span class="text-[11px] tracking-[0.12em] text-muted dark:text-nightMuted">NETEASE CLOUD MUSIC</span>
+        </div>
+        <p class="mt-4 text-[14.5px] font-light leading-[1.95] text-muted dark:text-nightMuted">
+          感觉不错就随手扔的，不得不说网易云推送机制还行。希望喜欢，
+          共 <span class="js-count" data-count="ne">—</span> 首。
+        </p>
+
+        <!-- 歌曲列表由页面底部的脚本按 TS_PLAYLISTS.ne 渲染 -->
+        <div class="songlist mt-7" data-list="ne"></div>
+        <div class="pager" data-pager="ne"></div>
+
+        <p class="mt-6 text-[12.5px] leading-relaxed text-muted dark:text-nightMuted">
+          想收藏整个歌单，
+          <a href="https://music.163.com/playlist?id=8731049619" target="_blank" rel="noopener"
+             class="text-accent/90 transition-opacity hover:opacity-65">去网易云音乐打开 →</a>
+        </p>
+      </article>
+
+    </div>
+
+    <p class="music-in mt-20 text-[12px] tracking-wider text-muted dark:text-nightMuted">
+      歌单会不定期更新。
+    </p>
+
+  </main>
+</div><!-- /#music -->
+
+
+<!-- ============================================================
+     阅读页（目录 / 正文），内容由脚本自动生成
+     ============================================================ -->
+<div id="reader" class="hidden">
+
+  <header class="reader-bar fixed inset-x-0 top-0 z-50 border-b border-line dark:border-nightLine">
+    <div class="mx-auto flex h-16 max-w-content items-center justify-between gap-4 px-6">
+      <a href="#/" class="group inline-flex shrink-0 items-center gap-2 text-[13px] text-muted transition-colors hover:text-accent dark:text-nightMuted dark:hover:text-accent">
+        <span aria-hidden="true" class="transition-transform duration-300 group-hover:-translate-x-1">←</span>
+        返回首页
+      </a>
+
+      <span id="readerWorkTitle" class="truncate font-serif text-[13px] tracking-[0.08em] text-muted dark:text-nightMuted"></span>
+
+      <button type="button" aria-label="切换主题"
+              class="js-theme-toggle flex h-8 w-8 shrink-0 items-center justify-center rounded-full border border-line text-muted transition-colors hover:border-accent hover:text-accent dark:border-nightLine dark:text-nightMuted">
+        <svg class="theme-sun h-[15px] w-[15px]" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+             stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="4.2" />
+          <path d="M12 2.4v2.1M12 19.5v2.1M4.2 12H2.1M21.9 12h-2.1M6.3 6.3 4.8 4.8M19.2 19.2l-1.5-1.5M17.7 6.3l1.5-1.5M4.8 19.2l1.5-1.5" />
+        </svg>
+        <svg class="theme-moon h-[15px] w-[15px]" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+             stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
+        </svg>
+      </button>
+    </div>
+  </header>
+
+  <main class="mx-auto max-w-content px-6 pt-32 pb-28">
+
+    <!-- 目录视图 -->
+    <div id="tocView" class="hidden">
+      <p id="tocKicker" class="mb-4 text-[11px] tracking-[0.32em] text-muted dark:text-nightMuted">CONTENTS</p>
+      <h1 id="tocTitle" class="font-serif text-[1.7rem] leading-snug tracking-tight sm:text-[2rem]"></h1>
+      <p id="tocDesc" class="mt-6 text-[14.5px] font-light leading-[2] text-muted dark:text-nightMuted"></p>
+      <ol id="tocList" class="mt-12 border-t border-line dark:border-nightLine"></ol>
+    </div>
+
+    <!-- 正文视图 -->
+    <article id="chapterView" class="hidden">
+      <p id="chapterKicker" class="mb-4 text-[11px] tracking-[0.32em] text-muted dark:text-nightMuted"></p>
+      <h1 id="chapterTitle" class="font-serif text-[1.6rem] leading-snug tracking-tight sm:text-[1.95rem]"></h1>
+      <p id="chapterMeta" class="mt-5 text-[12px] tracking-wider text-muted dark:text-nightMuted"></p>
+      <div id="chapterBody" class="prose-reader mt-14"></div>
+      <nav id="chapterNav" class="mt-20 flex items-center justify-between gap-4 border-t border-line pt-8 text-[13px] dark:border-nightLine"></nav>
+    </article>
+
+  </main>
+</div><!-- /#reader -->
+
+
+<!-- ============================================================
+     文章正文区 —— 以后只改这里就好
+
+     加一章：复制一整块 <section>…</section>，改属性，然后
+             把正文纯文本直接粘在里面。不用写 <p> 标签。
+
+     属性说明：
+       data-work-id  属于哪部作品，必须和上面卡片一致
+                     qu    = 驱灵师
+                     pian  = 片段
+                     her   = 赫尔加探案集
+                     notes = 哲学笔记
+       data-title    这一章 / 这一篇的标题（目录里显示的就是它）
+       data-date     日期，可留空写成 data-date=""
+       data-format   分段方式，一般不用写（默认自动）。
+                     想强制指定时才加：
+                       data-format="line"   每一行都算一段
+                       data-format="blank"  只有空行才算分段
+
+     自动分段规则：
+       · 有空行的 → 空行分段，段内的单换行会接在一起
+       · 没空行的 → 每行一段；但如果上一行结尾不是句末标点，
+                    而且这行开头没有缩进，就判定为同一段（自动接上）
+
+     首行缩进规则（重点）：
+       · 段落开头没写空格 → 顶格显示，网页不会自动补缩进
+       · 段落开头写了全角空格（或者两个以上半角空格）
+         → 这一行会被当成新段落，并且缩进两字
+       · 也就是说：缩进完全由你原文决定，写就有，不写就没有。
+         那个用来缩进的全角空格会被自动去掉，改由网页统一
+         缩进两字，所以每段对齐是整齐的。
+       · 文件里第一段开头的缩进也会被保留。
+
+     还能用的几个排版记号（各自独占一行）：
+       # 小标题          → 显示为小标题
+       ## 更小的标题     → 显示为次一级小标题
+       ---  或  ***      → 显示为一条分隔线（用来分场景）
+       > 引用的话        → 显示为引文块
+
+     注意：正文里如果出现 < 或 & 这两个符号，请写成 &lt; 和 &amp;
+     ============================================================ -->
+
+<div id="library" hidden>
+
+  <!-- ========== 《驱灵师》 ========== -->
+
+  <section class="chapter" data-work-id="qu" data-title="空白1" data-date="2025.03.14">
+这里是《驱灵师》第一章的正文占位。这一行开头没有写空格，所以它会顶格显示，不会被自动缩进。
+
+　　这一行开头有一个全角空格，所以它会缩进两字，和上一段形成对比。
+
+这一行与上一行之间隔着一个空行，所以另起一段，同样顶格显示。
+
+---
+
+上面那行是三个减号，会显示成一条分隔线，用来分场景。
+  </section>
+
+  <!-- 再加一章，就把上面那一整块 <section>…</section> 复制到下面，
+       改掉 data-title 和正文内容即可。 -->
+
+  <!-- ========== 《片段》 ========== -->
+
+  <section class="chapter" data-work-id="pian" data-title="空白1" data-date="2025.01.08">
+空白1
+  </section>
+
+  <!-- ========== 《赫尔加探案集》 ========== -->
+
+  <section class="chapter" data-work-id="her" data-title="空白1" data-date="2025.02.20">
+空白1
+  </section>
+
+  <!-- ========== 哲学笔记 ==========
+       （顺序决定目录顺序：排在最上面的是第一篇） -->
+
+  <section class="chapter" data-work-id="notes" data-title="当我说「我」的时候，我在指什么" data-date="2025.03.14">
+空白1
+  </section>
+
+  <section class="chapter" data-work-id="notes" data-title="关于自由的误读：从消极自由到日常练习" data-date="2025.02.02">
+空白1
+  </section>
+
+  <section class="chapter" data-work-id="notes" data-title="语言能说清痛苦吗——文字之外无他物" data-date="2025.01.11">
+空白1
+  </section>
+
+  <section class="chapter" data-work-id="notes" data-title="虚无主义的三种面孔，以及一种温和的回应" data-date="2024.12.09">
+空白1
+  </section>
+
+  <section class="chapter" data-work-id="notes" data-title="为什么我们仍然需要故事：论叙事作为认知工具" data-date="2024.11.20">
+空白1
+  </section>
+
+</div><!-- /#library -->
+
+
+<script>
+  /* ---------- 主题切换（每页的按钮都能用） ---------- */
+  (function () {
+    var root = document.documentElement;
+    var buttons = document.querySelectorAll('.js-theme-toggle');
+
+    buttons.forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        var isDark = root.classList.toggle('dark');
+        try { localStorage.setItem('theme', isDark ? 'dark' : 'light'); } catch (e) {}
+      });
+    });
+  })();
+
+  /* ---------- 首页：导航栏滚动状态 ---------- */
+  (function () {
+    var nav = document.getElementById('nav');
+    var onScroll = function () {
+      if (window.scrollY > 20) nav.classList.add('is-scrolled');
+      else nav.classList.remove('is-scrolled');
+    };
+    window.addEventListener('scroll', onScroll, { passive: true });
+    onScroll();
+  })();
+
+  /* ---------- 首页：滚动淡入 ---------- */
+  (function () {
+    var items = document.querySelectorAll('#home .reveal');
+
+    if (!('IntersectionObserver' in window)) {
+      items.forEach(function (el) { el.classList.add('visible'); });
+      return;
+    }
+
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry, i) {
+        if (!entry.isIntersecting) return;
+        var el = entry.target;
+        el.style.transitionDelay = Math.min(i, 4) * 70 + 'ms';
+        el.classList.add('visible');
+        io.unobserve(el);
+      });
+    }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+
+    items.forEach(function (el) { io.observe(el); });
+  })();
+
+  /* ---------- 首页：导航高亮当前板块 ---------- */
+  (function () {
+    var links = document.querySelectorAll('#nav .navlink');
+    var sections = [];
+    links.forEach(function (a) {
+      var id = a.getAttribute('href');
+      if (id && id.charAt(0) === '#') {
+        var sec = document.querySelector(id);
+        if (sec) sections.push({ link: a, sec: sec });
+      }
+    });
+
+    if (!sections.length) return;
+
+    var onScroll = function () {
+      var pos = window.scrollY + 120;
+      var current = null;
+      sections.forEach(function (s) {
+        if (s.sec.offsetTop <= pos) current = s;
+      });
+      links.forEach(function (a) { a.classList.remove('active'); });
+      if (current) current.link.classList.add('active');
+    };
+
+    window.addEventListener('scroll', onScroll, { passive: true });
+    onScroll();
+  })();
+
+  /* ---------- 小音符：滚到页脚时自动淡出，免得压住文字 ---------- */
+  (function () {
+    var note   = document.getElementById('musicNote');
+    var footer = document.querySelector('#home footer');
+
+    if (!note || !footer) return;
+    if (!('IntersectionObserver' in window)) return;
+
+    var io = new IntersectionObserver(function (entries) {
+      note.classList.toggle('is-hidden', entries[0].isIntersecting);
+    }, { threshold: 0.05 });
+
+    io.observe(footer);
+  })();
+
+  /* ==========================================================
+     阅读页 / 音乐页：显示隐藏与路由
+     ========================================================== */
+  (function () {
+
+    var home        = document.getElementById('home');
+    var reader      = document.getElementById('reader');
+    var music       = document.getElementById('music');
+    var tocView     = document.getElementById('tocView');
+    var chapterView = document.getElementById('chapterView');
+    var SITE_NAME   = 'TickSpring';
+    var ORIGINAL_TITLE = document.title;
+
+    /* ===== 纯文本 → 段落 的自动识别工具 ===== */
+
+    // 行尾是这些字符时，认为一句话已经说完
+    var TERMINAL   = /[。！？!?…~～.」』”"）)】》〉]$/;
+    // 行尾是中文/全角字符时，拼接下一行不加空格
+    var CJK_TAIL   = /[\u2e80-\u9fff\u3000-\u303f\uff00-\uffef—…]$/;
+    var HR_LINE    = /^[-=*~—─※◇◆·•]{3,}$/;
+    var HEAD_LINE  = /^(#{1,3})\s+(.+)$/;
+    var QUOTE_LINE = /^>\s?/;
+    // 行首缩进：一个全角空格，或两个以上半角空格
+    var INDENT_HEAD = /^(?:\u3000|[\u00a0]{2}|[ \t]{2,})/;
+
+    function esc(s) {
+      return String(s).replace(/&/g, '&amp;')
+                      .replace(/</g, '&lt;')
+                      .replace(/>/g, '&gt;');
+    }
+    function trimLine(s) {
+      return String(s).replace(/^[\s\u3000\u00a0]+/, '')
+                      .replace(/[\s\u3000\u00a0]+$/, '');
+    }
+    function isIndented(s) {
+      return INDENT_HEAD.test(s);
+    }
+    function joinSoft(a, b) {
+      if (!a) return b;
+      return CJK_TAIL.test(a) ? a + b : a + ' ' + b;
+    }
+
+    // 已是 HTML 写法时：把「<p> 开头带缩进」的段落标记出来
+    function indentifyHTML(html) {
+      return String(html).replace(
+        /<p\b([^>]*)>(?=[\u3000\u00a0]|&nbsp;|[ \t]{2,})/gi,
+        function (m, attrs) {
+          if (/\bclass\s*=/.test(attrs)) {
+            return '<p' + attrs.replace(
+              /class\s*=\s*(['"])([^'"]*)\1/i,
+              function (mm, q, c) {
+                return 'class=' + q + (c ? c + ' ' : '') + 'is-indent' + q;
+              }
+            ) + '>';
+          }
+          return '<p' + attrs + ' class="is-indent">';
+        }
+      );
+    }
+
+    function textToHTML(raw, format) {
+      var src = String(raw == null ? '' : raw)
+                  .replace(/\r\n?/g, '\n')
+                  // 只去掉开头的空行，保留第一行自己的缩进
+                  .replace(/^(?:[ \t\u3000\u00a0]*\n)+/, '')
+                  .replace(/[\s\u3000\u00a0]+$/, '');
+
+      var mode      = format || 'auto';
+      var hasGap    = /\n[ \t\u3000\u00a0]*\n/.test(src);
+      var lineMode  = (mode === 'line');
+      var blankMode = (mode === 'blank') || (mode === 'auto' && hasGap);
+
+      var lines  = src.split('\n');
+      var blocks = [];
+      var cur        = '';
+      var curKind    = 'p';
+      var curIndent  = false;   // 当前段落的第一行是否带缩进
+
+      function flush() {
+        var t = cur.trim();
+        if (t) blocks.push({ kind: curKind, text: t, indent: curIndent });
+        cur = '';
+        curIndent = false;
+      }
+      function startNew(kind) { flush(); curKind = kind; }
+
+      for (var i = 0; i < lines.length; i++) {
+        var rawLine  = lines[i];
+        var indented = isIndented(rawLine);
+        var t        = trimLine(rawLine);
+
+        if (!t) { startNew('p'); continue; }          // 空行 → 分段
+
+        if (HR_LINE.test(t)) {                        // 分隔线
+          startNew('p');
+          blocks.push({ kind: 'hr', text: '' });
+          continue;
+        }
+
+        if (HEAD_LINE.test(t)) {                      // 小标题
+          startNew('p');
+          blocks.push({ kind: 'head', text: t });
+          continue;
+        }
+
+        if (QUOTE_LINE.test(t)) {                     // 引文
+          if (curKind !== 'quote') startNew('quote');
+          cur = joinSoft(cur, t.replace(QUOTE_LINE, ''));
+          continue;
+        }
+
+        if (curKind !== 'p') startNew('p');           // 从引文切回正文
+
+        var shouldBreak;
+        if (lineMode)        shouldBreak = true;
+        else if (blankMode)  shouldBreak = false;
+        else                 shouldBreak = (indented || TERMINAL.test(cur));
+
+        if (shouldBreak) flush();
+
+        if (cur === '') curIndent = indented;         // 只在段落第一行记录缩进
+        cur = joinSoft(cur, t);
+      }
+      flush();
+
+      return blocks.map(function (b) {
+        if (b.kind === 'hr') return '<hr class="scene-break" />';
+
+        if (b.kind === 'head') {
+          var m  = b.text.match(HEAD_LINE);
+          var lv = Math.min(m[1].length + 1, 4);     // # → h2, ## → h3, ### → h4
+          return '<h' + lv + '>' + esc(m[2]) + '</h' + lv + '>';
+        }
+
+        if (b.kind === 'quote') {
+          return '<blockquote>' + esc(b.text) + '</blockquote>';
+        }
+
+        return '<p' + (b.indent ? ' class="is-indent"' : '') + '>'
+             + esc(b.text) + '</p>';
+      }).join('\n');
+    }
+
+    /* ---- 1. 读取作品信息（标题、简介直接取自首页卡片） ---- */
+    var workMeta = {};
+    document.querySelectorAll('#home article[data-work-id]').forEach(function (card) {
+      var id = card.getAttribute('data-work-id');
+      var h3 = card.querySelector('h3');
+      var p  = card.querySelector('p');
+      workMeta[id] = {
+        title: h3 ? h3.textContent.trim() : id,
+        desc:  p ? p.textContent.replace(/\s+/g, ' ').trim() : ''
+      };
+    });
+
+    var extraMeta = {
+      notes: {
+        title: '哲学笔记',
+        desc:  '不是论文，只是把一些想不通的事情写下来。写完之后，通常还是想不通。'
+      }
+    };
+
+    function metaOf(id) {
+      return workMeta[id] || extraMeta[id] || { title: id, desc: '' };
+    }
+
+    /* ---- 2. 收集章节目录（来自 #library） ---- */
+    var chapters = {};
+
+    document.querySelectorAll('#library .chapter').forEach(function (sec) {
+      var id = sec.getAttribute('data-work-id');
+      if (!id) return;
+      if (!chapters[id]) chapters[id] = [];
+
+      var html;
+      if (sec.children.length > 0 && sec.getAttribute('data-format') !== 'text') {
+        // 里面写的是 <p>…</p> 这类 HTML，就原样使用
+        html = indentifyHTML(sec.innerHTML);
+      } else {
+        // 里面是纯文本，自动识别分段
+        html = textToHTML(sec.textContent, sec.getAttribute('data-format'));
+      }
+
+      chapters[id].push({
+        title: sec.getAttribute('data-title') || ('第 ' + (chapters[id].length + 1) + ' 章'),
+        date:  sec.getAttribute('data-date') || '',
+        html:  html
+      });
+    });
+
+    /* ---- 小工具 ---- */
+    function makeEl(tag, className, text) {
+      var e = document.createElement(tag);
+      if (className) e.className = className;
+      if (text !== undefined && text !== null) e.textContent = text;
+      return e;
+    }
+    var MUTED_LINK = 'text-muted transition-colors hover:text-accent dark:text-nightMuted dark:hover:text-accent';
+    var DEAD_LINK  = 'text-line dark:text-nightLine';
+
+    /* ---- 3. 渲染目录 ---- */
+    function renderTOC(workId) {
+      var m    = metaOf(workId);
+      var list = chapters[workId] || [];
+      var enc  = encodeURIComponent(workId);
+
+      document.getElementById('readerWorkTitle').textContent = m.title;
+      document.getElementById('tocKicker').textContent = 'CONTENTS · 共 ' + list.length + ' 章';
+      document.getElementById('tocTitle').textContent  = m.title;
+
+      var descEl = document.getElementById('tocDesc');
+      descEl.textContent = m.desc;
+      descEl.style.display = m.desc ? '' : 'none';
+
+      var ol = document.getElementById('tocList');
+      ol.innerHTML = '';
+
+      if (!list.length) {
+        ol.appendChild(makeEl('li',
+          'py-6 text-[13.5px] font-light text-muted dark:text-nightMuted',
+          '这部作品还没有章节，稍后更新。'));
+        return;
+      }
+
+      list.forEach(function (ch, i) {
+        var li = document.createElement('li');
+        var a  = document.createElement('a');
+        a.href = '#/read/' + enc + '/' + i;
+        a.className = 'note-row group flex items-baseline gap-4 border-b border-line py-5 sm:gap-6 dark:border-nightLine';
+
+        a.appendChild(makeEl('span',
+          'w-8 shrink-0 text-[11px] tabular-nums tracking-wider text-muted dark:text-nightMuted',
+          String(i + 1).padStart(2, '0')));
+        a.appendChild(makeEl('span',
+          'note-title flex-1 text-[14.5px] font-light leading-relaxed',
+          ch.title));
+        if (ch.date) {
+          a.appendChild(makeEl('span',
+            'hidden shrink-0 text-[11px] tabular-nums tracking-wider text-muted sm:block dark:text-nightMuted',
+            ch.date));
+        }
+        a.appendChild(makeEl('span', 'arrow text-accent', '↗'));
+
+        li.appendChild(a);
+        ol.appendChild(li);
+      });
+    }
+
+    /* ---- 4. 渲染正文 ---- */
+    function renderChapter(workId, index) {
+      var m    = metaOf(workId);
+      var list = chapters[workId] || [];
+      var ch   = list[index];
+      var enc  = encodeURIComponent(workId);
+
+      if (!ch) { renderTOC(workId); return; }
+
+      document.getElementById('readerWorkTitle').textContent = m.title;
+      document.getElementById('chapterKicker').textContent  = m.title;
+      document.getElementById('chapterTitle').textContent   = ch.title;
+
+      var metaParts = [];
+      if (ch.date) metaParts.push(ch.date);
+      metaParts.push('第 ' + (index + 1) + ' 章 / 共 ' + list.length + ' 章');
+      document.getElementById('chapterMeta').textContent = metaParts.join(' · ');
+
+      document.getElementById('chapterBody').innerHTML = ch.html;
+
+      /* 上一章 / 目录 / 下一章 */
+      var nav = document.getElementById('chapterNav');
+      nav.innerHTML = '';
+
+      var left = document.createElement(index > 0 ? 'a' : 'span');
+      left.className = index > 0 ? MUTED_LINK : DEAD_LINK;
+      left.textContent = '← 上一章';
+      if (index > 0) left.href = '#/read/' + enc + '/' + (index - 1);
+
+      var mid = makeEl('a', MUTED_LINK, '目录');
+      mid.href = '#/read/' + enc;
+
+      var right = document.createElement(index < list.length - 1 ? 'a' : 'span');
+      right.className = index < list.length - 1 ? MUTED_LINK : DEAD_LINK;
+      right.textContent = '下一章 →';
+      if (index < list.length - 1) right.href = '#/read/' + enc + '/' + (index + 1);
+
+      nav.appendChild(left);
+      nav.appendChild(mid);
+      nav.appendChild(right);
+
+      document.title = ch.title + ' · ' + m.title + ' · ' + SITE_NAME;
+    }
+
+    /* ---- 5. 显示 / 隐藏 ---- */
+    function showHome() {
+      reader.classList.add('hidden');
+      music.classList.add('hidden');
+      home.classList.remove('hidden');
+      document.title = ORIGINAL_TITLE;
+    }
+
+    function showTOC(workId) {
+      home.classList.add('hidden');
+      music.classList.add('hidden');
+      reader.classList.remove('hidden');
+      chapterView.classList.add('hidden');
+      tocView.classList.remove('hidden');
+      renderTOC(workId);
+      document.title = metaOf(workId).title + ' · ' + SITE_NAME;
+      window.scrollTo(0, 0);
+    }
+
+    function showChapter(workId, index) {
+      home.classList.add('hidden');
+      music.classList.add('hidden');
+      reader.classList.remove('hidden');
+      tocView.classList.add('hidden');
+      chapterView.classList.remove('hidden');
+      renderChapter(workId, index);
+      window.scrollTo(0, 0);
+    }
+
+    function showMusic() {
+      home.classList.add('hidden');
+      reader.classList.add('hidden');
+      music.classList.remove('hidden');
+      document.title = '音乐 · ' + SITE_NAME;
+      window.scrollTo(0, 0);
+    }
+
+    /* ---- 6. 路由：
+            #/read/作品ID
+            #/read/作品ID/章节序号
+            #/music
+       ---- */
+    function route() {
+      var raw   = location.hash.replace(/^#\/?/, '');
+      var parts = raw.split('/').filter(function (s) { return s.length; })
+                     .map(decodeURIComponent);
+
+      if (parts[0] === 'music') { showMusic(); return; }
+
+      if (parts[0] === 'read' && parts[1]) {
+        var workId = parts[1];
+        if (parts.length > 2 && /^\d+$/.test(parts[2])) {
+          showChapter(workId, parseInt(parts[2], 10));
+        } else {
+          showTOC(workId);
+        }
+        return;
+      }
+      showHome();
+    }
+
+    window.addEventListener('hashchange', route);
+    route(); // 打开页面时先按当前地址栏的判断一次
+
+    /* 按 Esc 返回首页（阅读页和音乐页都适用） */
+    document.addEventListener('keydown', function (e) {
+      if (e.key !== 'Escape') return;
+      if (/^#\/(read|music)/.test(location.hash)) location.hash = '#/';
+    });
+  })();
+</script>
+
+
+<script>
+/* ============================================================
+   歌单目录
+
+   数据格式：[曲名, 作者, 平台内 ID]
+   由歌单接口导出，换了歌单重新导出这一段即可，页面其余部分不用动。
+   ============================================================ */
+var TS_PLAYLISTS = {"qq":[["La foule (人群)","Gautier Capuçon/Jerome Ducros/Orchestre de Chambre de Paris/Lionel Bringuier","002AVfRe3yM1Jg"],["Feel My Rhythm (Orchestra Ver.)","Seoul Philharmonic Orchestra (首尔市立交响乐团)","002rFmUh1q3Xc7"],["ヴォヤージュ1969 (旅人1969)","彩音 ～xi-on～","002VrXuI2mtj4t"],["Get By","EA Sports College Football Marching Band","004YncYK1JcoVL"],["Pacifica (Slowed)","Caleb Bryant","003SGvkM3SmCvO"],["La ronde des Lutins (Scherzo Fantastique) , Op. 25 (小精灵的轮舞（幻想谐谑曲），Op. 25)","Itzhak Perlman","001Ukhxk4UmsHo"],["April","[.que] (柿本直)","003UDHaA0c5Clt"],["痛感失焦 (呼吸性碱中毒bgm)","银河小鱼","00064iMA0rnLmt"],["终幕：遗憾","白居可能易","001JKnAO0b3qQF"],["Concerto No. 4 in F Minor, Op. 8, RV. 297, \"Winter\"  - I. Allegro non molto (F小调小提琴协奏曲，作品8之4，RV 297，“冬” - 第一乐章 不太快的快板)","Herbert von Karajan/Anne-Sophie Mutter/Berliner Philharmoniker","002tx77m2GLnv8"],["Concerto in A minor, RV. 356 - III - Presto (a小调协奏曲，RV. 356)","Itzhak Perlman/Israel Philharmonic Orchestra","0017nb3z2mM7ql"],["Serenade in G Major, K. 525 \"Eine kleine Nachtmusik\" - II. Romance - Andante (G大调弦乐小夜曲, 作品525 - 第二乐章. 浪漫曲)","Herbert von Karajan/Berliner Philharmoniker","001HGVI60YXQXl"],["Felt like playing guitar and not singing part 2","Two Feet","004YlJUQ4SzRYa"],["When You\u0027re In Love","Jazzinuf/Intel Music","0047G4074JFmHp"],["Canon and Gigue in D Major - I. Canon (D大调卡农 - 第一乐章 卡农)","Herbert von Karajan/Berliner Philharmoniker/Frank Maus","001JsKqV20vNL9"],["Over the Rain","DJ OKAWARI/Emily Styler","001Ri5Wi1QvAEs"],["月景色","触手猴 (まらしぃ)","002WhLd14N7bct"],["Solitude -band ver-","Re:Plus (リ:プラス)","0019Twm10qRKWM"],["Charms","Abel Korzeniowski","0038gKuQ0ifosI"],["Concerto No. 2 in G Minor, Op. 8, RV. 315, \"Summer\"  - III. Presto (G小调小提琴协奏曲，作品8之2，RV 315，“夏” - 第三乐章 急板)","Herbert von Karajan/Anne-Sophie Mutter/Berliner Philharmoniker","0043lhuC0NLe6h"],["感官过载","残像音阶/M3mo","001jw3UA06n9H7"],["Seaside Steps","Orangestar (蜜柑星P)","0019w9Ea28ImZt"],["D Ξ L U Γ I Ø Ν","金桔ORANG3/Noah’SR","000QfWAQ1huXOl"],["Cloudstep (2024 Remake)","Plum","004XdaaU39ZTxW"],["秋鳴りシンフォニー (秋鸣交响乐)","Foxtail-Grass Studio","004ItF7F1RuaYX"],["墨与蝶 Arvilon","失忆海","0010I6DZ2ry5Bl"],["dance","Jizue","003aOKDK45Y499"],["Creator","Lena Raine/Minecraft","003rENNl4Sa6AE"],["Vltava (沃尔塔瓦河)","Herbert von Karajan/Berliner Philharmoniker","0016Vahb11gZDS"],["Lujon","Henry Mancini","000gRenY142vsq"],["踊子プリムロゼのテーマ","西木康智","0031ucgv4O5u13"],["量子力学のためのピアノ協奏曲","Various Artists/Cansol/Raimukun","000nExYS38sf73"],["Demey (Special Version)","Jeremy Ragheb","003ZmuOb2BrmtP"],["VISION","UdieNnx/HXVSAGE/Duduzinho","001n5f1T3UpsXE"],["Frühlingsstimmen, Op. 410 (Walzer - Coda) (1958 Recording)","Rita Streich/Kurt Gaebel/Radio-Symphonie-Orchester Berlin","002gkJEq4LMMvf"],["LE TEMPS DES FLEURS (THOSE WERE THE DAYS) 过去的好时光","Paul Mauriat","000tgSP00eYSYP"],["Lost in the Dark","AiYo","000L1V1l2fV23k"],["Vector to the Heavens","下村阳子 (しもむら ようこ)","0032W1jr3YtUXx"],["舒伯特：魔王","Shockwave-Sound","003RS3lJ1cCNKU"],["Destroyer Of Worlds","Ludwig Göransson","002JajMK0xcczd"],["Can You Hear The Music","Ludwig Göransson","001VgvEf16jNi2"],["21 Hungarian Dances, WoO 1 - Transcription Joseph Joachim - No. 1 in G Minor (21首匈牙利舞曲，WoO 1 - 约瑟夫·约阿希姆改编 - G小调第1号匈牙利舞曲)","Anne-Sophie Mutter/Lambert Orkis","001EuLED0OZZPQ"],["Danse Macabre (骷髅之舞)","Camille Saint-Saëns","002wmW1L04pBnF"],["The Sorcerer","Cory Wong/Metropole Orkest/Jules Buckley","000H4EQE0DK7oR"],["ワールズエンド・ダンスホール / ルカルカ★ナイトフィーバー (2019 Live)","東京フィルハーモニー交響楽団 (东京爱乐交响乐团)","001YqFJ24fdKwc"],["まりおさんに贈るナイト・オブ・ナイツ2018","触手猴 (まらしぃ)","0031r7jE3wlMk3"],["NEW ERA","fox capture plan","002iWRZH0KN8UX"],["情绪回收站 (钢琴版)","失落花园_","000ruhdH0b6f04"],["God knows...","触手猴 (まらしぃ)","000NErJm3EH6KB"],["乱码情绪","残像音阶","000GYh6U4199iy"],["回溯","豆糕p","003W5Qq13fFdXh"],["a memories for us feat.＂Day\u0027s＂","三轮学 (Manack)/MANYO (まにょっ)","002pdFGA1GEVgg"],["Polytope Instrumental","三浦大知 (みうら だいち)","000XFvBw0OEwWZ"],["コネクト (连系)","TAMUSIC","002nwbbH3dUdc0"],["踊れ魂","Jusqu\u0027à Grand-Père (ジュスカ・グランペール)","004UIOge2ZdIzA"],["Dawn (黎明)","Fabrizio Paterlini","001AWBCb2z8tGR"],["Travel Begins","ARForest","001dzmSQ0ZwSD6"],["Mechanisms","Kirill Richter","004BTPvD0dYmwe"],["Van Gogh","Virginio Aiello/Vesislava","0006at1840xin2"],["End of Story","削除 (Sakuzyo)","004WhOxP20g0ht"],["Primavera","Ludovico Einaudi","003eID582NuLky"],["Csardas (查尔达什舞曲)","London Violin Orchestra","001olpo02bhTrS"],["Merry-Go-Round of Life (人生旋转木马)","久石让","000Cmo8Q2pBpZs"],["Bouquet de lumiere","Tomoya Naka (中智彌|中智弥)","004eElpg16rLq6"],["Merry-Go-Round（人生のメリーゴーランド）","久石让","004YRyAC1RCBiF"],["Harenahare (晴天)","清塚信也 (Shin\u0027ya Kiyozuka)/高橋直之 (NAOTO)","001lIpT30htWK6"],["uzumakinoharu","sasakure.UK (ササクレ・ユーケイ)","000M0buE0ie6i6"],["東方萃夢想","TAMUSIC","000Je21U3FS3aX"],["magnet (磁铁)","触手猴 (まらしぃ)","001NeNZM46HrwA"],["Rosabel【The red Coronation Rearrange】 (Inst.)","Cre-sc3NT","0043tyF23Z0SPU"],["人生のメリーゴーランド (人生的旋转木马) (Jazz Ver.)","織田浩司 (オリタ ノボッタ)/シエナ・ウインド・オーケストラ (SIENA Wind Orchestra)/久石让","002BWEtV4d0TUD"],["Raindrops","Flavio Belardo","004OGTvw3d76aN"],["this is what sadness feels like(instrumental music)","Joker_Wang","0006Ct8f0uqrut"],["Nightbook 2","Ludovico Einaudi","000jWtfK3T82gs"],["Kronos","削除 (Sakuzyo)","002fQasu2ptc0z"],["Tokyovania Nitro","Nick Nitro","001dQPpK3YG4uf"],["维瓦尔第：四季·冬 - 第一乐章 不太快的快板","中国交响乐团","003PUT0S05XWNZ"],["Michael Meets Mozart - 1 Piano, 2 Guys, 100 Cello Tracks","Jon Schmidt/Steven Sharp Nelson","003L5uBd2ZzFZo"],["掟上今日子の備忘録 (掟上今日子的备忘录)","笹野芽実","003y8CxY17wldU"],["French movie waltz","Mushroom","004PoEJn0Q1WCL"],["The Forevers","Jo Blankenburg","001knkvA03gcye"],["with a smile (Remix)","Arunsigu","004WVsSy1iVn4V"],["манго нектар (Explicit)","Corn Wave","001v3nli2D6zYQ"],["rich-man","林友树 (林ゆうき)","000RRI952xsaQo"],["Towards the Light","Jacoo","001mBVwC1eyGVp"],["抉择","Powerful_K","001Kv1041CyLIr"],["Starlit Stroll (Deep Phonk)","7UK DJ","002lTc7G2Kjdh6"],["Colourful 2 (Instrumental)","鹭起Herons/好多纯音乐","0020YcXP33ybVu"],["To the Journey","Crest","002QEI762fahrC"],["破旧世界 (翻奏: 君溪龙)","药水冰箱","002go9cC0H72cM"],["PASSO BEM SOLTO (Slowed|Explicit)","Atlxs","004HVaRd3O8DDV"],["Axel F but it gets Harder and Harder","Sheet Music Boss","001JmEKS2bf2Cx"],["Signals","Lazer Boomerang","000RRjjt0dZMGE"],["Cold Mist","a_hisa","00053uWD4Oaz1x"]],"ne":[["LaVI-Bavellabion","三木谷奈々","3355150390"],["MAdEaR MAdEaR","東雲はる","3355150401"],["Floomin\u0027 All Day","Adrian van Sin","1459174181"],["Love Me","JMSN","2080324987"],["Lay Down","Caravan Palace","35527240"],["Mass Destruction (\"P3\" + \"P3F\" ver.)","川村ゆみ/Lotus Juice","864433756"],["春を告げる - With ensemble","yama","2028643597"],["センチメンタル☆ラッキーガール","shallm","2083075632"],["群青","YOASOBI","1472480890"],["星雨如注","Anming_cat","2711102082"],["hallucinations","zl_lan","2157172714"],["五月猫","ナナツカゼ","3383668637"],["Oracle (feat. nayuta)","Room97/nayuta","1838743757"],["猛独が襲う","まふまふ","524152942"],["Vibe (Sped Up)","ALTK","2641190948"],["秒針を噛む","ずっと真夜中でいいのに。","1325357378"],["8月31日","クレナズム","2056324975"],["ロックな君とはお別れだ","ツユ","1428275781"],["Raided","SHE\u0027S","1999539791"],["MONTAGEM BYE","broken/Trispect/Su7N1_Regret","3374555397"],["拼接遗憾2.0","MARiA/洛天依Official/见过夏天P","3417572662"],["arrow","トゲナシトゲアリ","3325110244"],["忘れてやらない","結束バンド","2003496467"],["暮れに茜、芥と花束","月詠み","1972402597"],["Memory Tower, Hall of Records","Chewie Melodies/Pealeaf","2155448053"],["My Bad","salem ilese","3373189366"],["Take Me (To The Moon)","Ian Asher/D A N N Y","3389580180"],["缄花未没","雪剑SnowSaber/胡思乱想P/青栀_wave/洛天依","3423114665"],["ネオン色のまち feat. Mai","REO","2110721699"],["MONTAGEM YUME","Bellyjay/KPHK","3351203472"],["MONTAGEM HARAHETTA","MGD/KPHK","3356402590"],["解脱","浦栗子SpuChestnut","2721832331"],["春に揺られど君想う","kobasolo/こぴ","1354813258"],["反乌托邦×拼接遗憾×Sinos De Natal","Vince丷/见过夏天P/Ciyo","3398249541"],["STRUCT","UdieNnx","2686252181"],["From The Start","Laufey","2047103213"],["Color Your Night","Chewie Melodies/Pealeaf","2126049290"],["インスタント・ラヴ","MIMiNARI/natsumi","2660502243"],["ハッピーエンドじゃ愛せない (feat. むト)","吐息/むﾄ","1867498207"],["愛を解く","yama","1992781641"],["PLASMA","坂部剛","3327098159"],["TIAN TIAN","Mili","2707332868"],["ドリームイーター (nakotanmaru ver.)","なこたんまる/PIKASONIC","2003904108"],["綺麗事","星街すいせい","2685920329"],["解脱pt.2","浦栗子SpuChestnut","3385362211"],["身体は正直だって言ってんの","式浦躁吾","1943925961"],["鳴らして（按下播放键）","S3werperson/Zy","3367641745"],["Shiny","明透","2626143591"],["DARKSIDE:DEITY","Sin Wecokat","3370641255"],["ありふれて花束 (feat. 菅原圭)","吐息./菅原圭","1842115208"],["Chronicle A","Empty old City","2088204761"],["春を告げる","yama","1486106274"],["BONITO SUFICIENTE","zxnc./MEZZIA","2740791204"],["バケモノの唄","Shino/初音ミク","1440693335"],["终日 Legacy","浦栗子SpuChestnut","2743555270"],["手を握っていて","ヒバナ","2605929320"],["ウミユリ海底譚","初音ミク/n-buna","423997819"],["天気の子","STRlighT","1973129951"],["D/N/A","Azari/重音テト/v flower","2693426774"],["Ai Đưa Em Về","FinalSay","3360228574"],["碎 憶 拼 接 (Fractured Recall)","凌晨一点的莱茵猫/洛米Gemini","3356977982"],["フラッシュバック","DUSTCELL","2085679258"],["在処","FROZEN QUALIA","1399646400"],["merry-go-round","緑黄色社会","1908809018"],["请不要带我走。","奥莉安多幻想曲/诗岸","2705295646"],["ムリムリ進化論","七音阿卡莉/ナユタン星人","2723338530"],["Don\u0027t say \"lazy\"","桜高軽音部","1311347389"],["Monster","chilldspot","1830453643"],["お勉強しといてよ","ずっと真夜中でいいのに。","1873231850"],["勘冴えて悔しいわ","ずっと真夜中でいいのに。","1399789325"],["違う曲にしようよ","ずっと真夜中でいいのに。","1920756484"],["クリームで会いにいけますか","ずっと真夜中でいいのに。","2707450677"],["残機","ずっと真夜中でいいのに。","1990571322"],["TAIDADA","ずっと真夜中でいいのに。","2633304572"],["MONTAGEM ECLIPSE","DJ FKU","3318301554"],["紅に染まる恋の花","Marcia","1438545192"],["サイエンス (feat. 重音テト)","MIMI/重音テト","2656567752"],["イオ","ロクデナシ","2730687734"],["High Five","清水美依紗","2158524450"],["弥渡山歌 (PHONK)","羊音乐","2744112026"],["花 feat. 花譜","Guiano/花譜","2048604694"],["星屑帐","Jackbot","3340858311"],["Tek It","Cafuné","1859556322"],["DAMIDAMI","Sihan/三Z-STUDIO/HOYO-MiX","2755332551"],["REVENGE","Poorghostgod/MerrinZephyr","3352038130"],["尊さを","ヒバナ","3357634257"],["僕らはそれを愛と呼んだ","あたらよ","2051328176"],["C_Aurora","Anming_cat","2708472474"],["散る散る満ちる","鷲尾伶菜","1907015019"],["Cheap Cologne","Graham","2089515207"],["SENTA CARA","Jmilton/DVC","2712494465"],["アスノヨゾラ哨戒班","めありー/Orangestar","557579434"],["Orquestra Maldita","TRASHXRL/Mc Delux","2053538266"],["貴方次第","青い子","2635788729"],["MEMORIZING","DJ DELACROIX/OXXED/Wintherduud","2733800375"],["シルエット","KANA-BOON","29750962"],["lonely night","7co","2038243167"],["星座になれたら","結束バンド","2003496380"],["ハルジオン","YOASOBI","1444071945"],["Dime Que Funk","Lunak","3358070914"],["Echomory","ITY","2691620028"],["雨中舞","Soulloom苏洛牧","2710575522"],["こだま","yama","2128301358"],["花曇り","佐藤千亜妃","2058678084"],["Eternal","浦栗子SpuChestnut","2717386727"],["あのね。","あれくん/『ユイカ』","1942631186"],["青色コントラスト","ヒバナ","2083457733"],["夏霞","あたらよ","1867150097"],["Crucified","Army of Lovers","26239571"],["灰かぶり","十明","2061225325"],["嘘じゃない","ずっと真夜中でいいのに。","2159057240"],["断捨離 (feat. りりあ。)","SG/りりあ。","1999301299"],["晴る","ヨルシカ","2624495089"],["打ち上げ花火","Daoko/米津玄師","524149974"],["少女A","椎名もた/鏡音リン","33516239"],["RED HOUR","ariiol","3356030222"],["SPOOKY","fennecxx/DJ Alex","2637117813"],["SOM PESADÃO","ovg!/DR FUNKO","3324215857"],["Orpheus","森カリオペ","3347141553"],["真夜中のドア〜stay with me (シングルver.)","松原みき","1317285056"],["SABE QUEBRAR","bxkq/axeos","3355041603"],["SLEEP","董宇尘","2738885153"],["2 days into college","Aimee Carty","2103900522"],["ギターと孤独と蒼い惑星","結束バンド","1991012773"],["Goodbye to Your Love feat. Ai Ninomiya","re:plus/二宮愛","414118212"],["MONTAGEM HASHIRU","Bellyjay/☆NoAki☆/SXLLX","3349444624"],["Die For You","VALORANT/Grabbitz","1974630461"],["スピカ","ロクデナシ","2053002545"],["Eternal Night(永夜)","BOY","3357709983"],["妄想哀歌 (feat. 初音ミク \u0026 可不)","MIMI/初音ミク/可不","2054974200"],["I watch the moon（Tek it）","星宝哇","2124448916"],["My jealousy (Original ver.)","DJMAX","22831636"],["MEMORIZING 2","DJ DELACROIX/OXXED/!NFNX","3311888991"],["recur you","NERO","2075604464"],["F_Ripples","Anming_cat","2697775368"],["World\u0027s Smallest Violin","AJR","1830531332"],["少年、風薫る","あたらよ","2164294439"],["HYPNOTIC","Atlxs","2660953047"],["Seven","DaHua","2063950076"],["フローリア","ヒバナ","2040876720"],["LUZ ROJA","bxkq","3322200148"],["花の塔","さユり","1968782163"],["カーテンコール (feat. CONA)","CONA/吐息","2160017684"],["her (feat. Annika Wells)","JVKE/Annika Wells","3317235944"],["你看，天黑了","魔鬼花园（李安健）","1984303443"],["MONTAGEM RUGADA","cape/JXNDRO/Sayfalse","2737972265"],["the prom","Glaive","2063748271"],["Whats Wrong With U","Sorisa","2754675673"],["Wasted (Nightcore) [Bass Boosted] (feat. harmony haven)","murkish/Huken/harmony haven","1968316652"],["The Other Side Of Paradise","Glass Animals","2668934341"],["UNICUBE!","Leoseven/Obaka","2630455521"],["Sinos De Natal","MGD/MXZHPHXNK","3320179802"],["unhappy","s0rrow","3332771263"],["五月は花緑青の窓辺から","ヨルシカ","1357953769"],["a.m.3:21","yama","1896176735"],["MONTAGEM SOLITARIA","Ranfish222/ItsInochi/LXST DRAGON","2706943889"],["Suspicious","RJ Pasin","2067884789"],["HOMAGE FUNK","KIXIA/KREZUS/MC KAIQUE SP","2752128676"],["追憶 (feat. nakotanmaru)","PIKASONIC/なこたんまる","1869161372"],["青のすみか","キタニタツヤ","2056914217"],["月が綺麗ねと言われたい！","柿崎ユウタ","3339128120"],["Trampoline","Shaed","1311540224"],["MTG THE MASTERMIND","METAMOON/7YORU/ArrAy-P/无人区","3342795589"],["DYNAMITE (feat. Tanger)","TREB/Tanger","2639535438"],["Vem Vem V2","DT LEXNAT","2726490296"],["Bet On Me (Organic Version)","Walk off the Earth/D Smoke","1938756186"],["Dragonflame","Kirara Magic","2009411428"],["Michelin","X Chamber","2749070475"],["QUIERO CONTIGO","QMIIR/melxnely/d1ska","2750834638"],["DANCE!","STXSTN","2067334162"],["Catch My Breath","Kelly Clarkson","26226510"],["シンデレラストーリ","AliA","1985461483"],["空の箱 (井芹仁菜、河原木桃香（Live at 川崎駅東口駅前広場 edit）)","トゲナシトゲアリ","2686502882"],["第六感 feat.東京ゲゲゲイ","Reol/東京ゲゲゲイ","1903373190"],["God knows...","平野綾","22826401"],["蝶に結いた赤い糸","トゲナシトゲアリ","2621539078"],["AIZO","King Gnu","3337367763"],["BRIGHTEST HEART","高柳知葉","2706903589"],["Primavera","Ludovico Einaudi","1648834"],["好きだから。 (Piano ver.)","『ユイカ』","1883633181"],["Cheers","MAISONdes/Tani Yuuki/菅原圭","1937442721"],["Metamorphose","MONKEY MAJIK","1424028303"],["Unslept","未來電波基地","2713954106"],["Heavenly Me","AIYUE/理名/塞壬唱片-MSR","2699629221"],["まにまに","r-906/初音ミク","1939575649"],["ハミング","幾田りら","2158979382"],["ヒステリックナイトガール -Awakening- (feat. Such)","PSYQUI/Such","1385165831"],["Zouzei Funk","Syensan","3326382885"],["DARKSIDE:CRYSTAL","Sin Wecokat","3349327361"],["もうじき夏が終わるから","n-buna/初音ミク","33367332"],["感傷幽霊","ナツノセ","2055004158"],["NIGHT DANCER","imase","2624495087"],["白夜にて","Albemuth","2100325340"],["VISIONS （『仮面ライダーゼッツ』主題歌）","NAQT VANE","2750093263"],["MONTAGEM HIKARI JUMPSTYLE","TWXNY/Bellyjay/INNXCENCE","3345839886"],["情绪回收站","失落花园_","2752519729"],["パステルレイン","三月のパンタシア","1351240237"],["リリィ (feat. 倚水)","倚水/吐息","2060045141"],["くらべられっ子","ツユ","1428278494"],["The final Landscape…","DJ YUGABD","3362203375"],["So Addictive","鷲尾伶菜","2085790747"],["MONTAGEM SEM PARA 2","Lunak/CaiQing","2747886054"],["おしんこ","田中ユウスケ/agehasprings","2686502900"],["MAGENTA POTION (Extended Mix)","EmoCosine","1892833643"],["The Bird Song","Noah Floersch","2614571488"],["星と僕らと (tofubeats Remix)","Lyn","864433778"],["はじまりの曲","厚揚げろが。","2686608269"],["蜘蛛糸モノポリー","sasakure.UK/初音ミク","26440351"],["Remember","yuigot/月見ヤチヨ(cv.早見沙織)/超かぐや姫！","3340112781"],["星降る海","Aqu3ra/月見ヤチヨ(cv.早見沙織)/超かぐや姫！","3340112782"],["私は、わたしの事が好き。","HoneyWorks/かぐや(cv.夏吉ゆうこ)/超かぐや姫！","3340113698"],["ハッピーシンセサイザ (Cover)","かぐや(cv.夏吉ゆうこ)/超かぐや姫！","3340112784"],["ワールドイズマイン (Anime ver.) [CPK! Remix]","ryo (supercell)/夏吉ゆうこ/早見沙織","3340107499"],["Ex-Otogibanashi","ryo (supercell)/夏吉ゆうこ/早見沙織","3340105619"],["瞬間、シンフォニー。","40mP/かぐや(cv.夏吉ゆうこ)/超かぐや姫！","3340113701"],["Reply","kz/かぐや(cv.夏吉ゆうこ)/超かぐや姫！","3340114785"],["ray (超かぐや姫！ Version)","かぐや(cv.夏吉ゆうこ)/月見ヤチヨ(cv.早見沙織)/超かぐや姫！","3340114786"],["メルト (かぐや ver.) [CPK! Remix]","ryo (supercell)/夏吉ゆうこ","3340107497"],["バケモノの唄 (Instrumental)","我无记忆","2705652124"],["回溯","豆糕p/路明熹","3328619434"],["乱码情绪","残像音阶","3325185866"],["NEW ERA","十明","2149019899"],["まりおさんに贈るナイト・オブ・ナイツ2018","まらしぃ","562675986"],["Danse Macabre","London Symphony Orchestra","27323015"],["Can You Hear The Music","Ludwig Göransson","2063106789"],["Destroyer Of Worlds","Ludwig Göransson","2063107675"],["MONTAGEM SEM PARA","DJ FKU/DJ MOIGUS/DJ PETYA","2731078844"],["Montagem Supersonic","KHAOS/Jmilton/Mc Jaja","2723942209"],["Montagem Bandido","Jmilton/Itamar MC","2700768820"],["Sleeping City Funk","DJ RAULIPUES/DJ FANGZ/TrongKien","3312354474"],["SEM NADA","Ogryzek/F!xmexed/LeoTHM","2747697745"],["MONTAGEM 486","LumynX/DJ XRAY","3316995512"],["MONTAGEM HIKARI","Bellyjay","3338555908"],["MONTAGEM FUERZA","MerrinZephyr","2755303092"],["I can\u0027t say","HFHW","3343561445"],["MI RESPIRAR","bxkq/h6itam","3324615547"],["M3","Les Apollo","2092324876"],["END","MoonDeity","2641518019"],["MONTAGEM REBOLA","Atlxs/DJ FKU","2748872281"],["X-COOL!","tienanh109/HDN/MC K3/hailong140","2745805150"],["MONTAGEM ALQUIMIA","h6itam/n7san7os/MC Menor do Alvorada","3338698698"],["DREAM FUNK","Lumix/Kxrsed","3333252769"],["FAVELA","MXZI/Deno","2758317825"],["あいつら全員同窓会","ずっと真夜中でいいのに。","1854474192"],["超える","[Alexandros]","2691794459"],["ずっとずっとずっと","緑黄色社会","1846296250"],["勘冴えて悔しいわ","ずっと真夜中でいいのに。","1369723738"],["ブレインロット","東京真中/重音テト","3348197008"],["Contact","Lulleaux/Giang Pham","500412390"],["Smile","Dami Im","32341765"],["なんでもないや","TAMUSIC","497131724"],["なんでもないや/没什么大不了 -Acoustic ver.-","夏璃夜","448982262"],["Thank you for dears.","GET IN THE RING","737955"],["Discord-disco","十明","2089954749"],["又三郎","ヨルシカ","1850977722"],["老人と海","ヨルシカ","1870469768"],["言って。","ヨルシカ","487527980"],["極夜","あたらよ","1929062241"],["impulse","AliA","1349892107"],["RETAKE","野田愛実","3358030188"],["Don\u0027t say \"lazy\" [5人Ver.]","放課後ティータイム","514765042"],["うそつきマカロン (feat. 重音テト)","暴飲暴食P/重音テト","3339091911"],["心予報","Eve","1423990087"],["Montagem pitty","见过夏天P/洛天依","3356975915"],["反乌托邦","乌托邦P","2671812705"],["英雄主义","在虚无中永存","2684510360"],["反正","老番茄","1970633784"]]};
+
+/* 每页显示几首 */
+var TS_PAGE_SIZE = 10;
+
+/* 各平台的单曲页地址（桌面端直接走这个） */
+var TS_SONG_URL = {
+  qq: function (id) { return 'https://y.qq.com/n/ryqq/songDetail/' + encodeURIComponent(id); },
+  ne: function (id) { return 'https://music.163.com/song?id=' + encodeURIComponent(id); }
+};
+
+/* ------------------------------------------------------------
+   手机端点歌名：先试着唤起 APP，唤不起来再退回网页版。
+   不想让页面擅自跳 APP 的话，把下面这行改成 false。
+   ------------------------------------------------------------ */
+var TS_OPEN_APP_ON_MOBILE = true;
+
+var TS_IS_MOBILE = TS_OPEN_APP_ON_MOBILE &&
+  /Android|iPhone|iPad|iPod|Windows Phone|HarmonyOS|Mobile/i.test(navigator.userAgent || '');
+
+/* 两家 APP 的 URL scheme */
+var TS_APP_SCHEME = {
+  qq: function (id) {
+    return 'qqmusic://qq.com/media/playSonglist?p=' +
+           encodeURIComponent('{"song":[{"songmid":"' + id + '"}],"action":"play"}');
+  },
+  ne: function (id) { return 'orpheus://song/' + id; }
+};
+
+/* 试唤起 APP：给 1.6 秒，页面要是被切到后台了说明 APP 起来了，就不跳网页了。
+   没装 APP 的话浏览器多半会报一句「打不开」，随后这里会自己退回网页版。 */
+function tsOpenInApp(scheme, webUrl) {
+  var settled = false;
+  var timer   = setTimeout(function () {
+    if (settled) return;
+    settled = true;
+    window.location.href = webUrl;
+  }, 1600);
+
+  function cancel() {
+    if (settled) return;
+    settled = true;
+    clearTimeout(timer);
+  }
+
+  document.addEventListener('visibilitychange', function () {
+    if (document.hidden) cancel();
+  });
+  window.addEventListener('pagehide', cancel);
+
+  window.location.href = scheme;
+}
+
+(function () {
+
+  var state = { qq: 1, ne: 1 };
+
+  function el(tag, cls, text) {
+    var node = document.createElement(tag);
+    if (cls) node.className = cls;
+    if (text != null) node.textContent = text;
+    return node;
+  }
+
+  /* 页码列表，页数多的时候中间折叠成 … */
+  function pageNumbers(current, total) {
+    if (total <= 7) {
+      var all = [];
+      for (var i = 1; i <= total; i++) all.push(i);
+      return all;
+    }
+    var out  = [1];
+    var from = Math.max(2, current - 1);
+    var to   = Math.min(total - 1, current + 1);
+    if (from > 2) out.push('…');
+    for (var j = from; j <= to; j++) out.push(j);
+    if (to < total - 1) out.push('…');
+    out.push(total);
+    return out;
+  }
+
+  function makeButton(label, enabled, onClick) {
+    var btn = el('button', 'pager-btn', label);
+    btn.type = 'button';
+    if (enabled) btn.addEventListener('click', onClick);
+    else btn.disabled = true;
+    return btn;
+  }
+
+  function jumpTo(key, page) {
+    state[key] = page;
+    render(key, true);
+  }
+
+  function render(key, scroll) {
+    var songs   = TS_PLAYLISTS[key] || [];
+    var listEl  = document.querySelector('.songlist[data-list="' + key + '"]');
+    var pagerEl = document.querySelector('.pager[data-pager="' + key + '"]');
+    if (!listEl || !pagerEl) return;
+
+    var pages = Math.max(1, Math.ceil(songs.length / TS_PAGE_SIZE));
+    var page  = Math.min(Math.max(1, state[key]), pages);
+    state[key] = page;
+
+    var start = (page - 1) * TS_PAGE_SIZE;
+
+    /* ---- 歌曲 ---- */
+    listEl.textContent = '';
+
+    songs.slice(start, start + TS_PAGE_SIZE).forEach(function (song, i) {
+      var title  = song[0] || '（无题）';
+      var artist = song[1] || '未知';
+
+      var row = el('a', 'song-row');
+      row.href   = TS_SONG_URL[key](song[2]);
+      row.target = '_blank';
+      row.rel    = 'noopener';
+      row.title  = title + ' — ' + artist;   // 名字被截断时，悬停能看全
+
+      /* 手机上先试 APP。href 仍是网页地址，长按复制 / 新标签打开都不受影响 */
+      if (TS_IS_MOBILE) {
+        row.addEventListener('click', function (e) {
+          if (e.defaultPrevented || e.button !== 0 ||
+              e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+          e.preventDefault();
+          tsOpenInApp(TS_APP_SCHEME[key](song[2]), row.href);
+        });
+      }
+
+      var n = start + i + 1;
+      row.appendChild(el('span', 'song-idx', (n < 10 ? '0' : '') + n));
+      row.appendChild(el('span', 'song-title', title));
+      row.appendChild(el('span', 'song-artist', artist));
+      row.appendChild(el('span', 'song-go', '↗'));
+
+      listEl.appendChild(row);
+    });
+
+    /* ---- 翻页 ---- */
+    pagerEl.textContent = '';
+
+    pagerEl.appendChild(makeButton('‹ 上一页', page > 1, function () { jumpTo(key, page - 1); }));
+
+    pageNumbers(page, pages).forEach(function (n) {
+      if (n === '…') {
+        pagerEl.appendChild(el('span', 'pager-dots', '…'));
+        return;
+      }
+      var btn = makeButton(String(n), n !== page, function () { jumpTo(key, n); });
+      if (n === page) btn.setAttribute('aria-current', 'page');
+      pagerEl.appendChild(btn);
+    });
+
+    pagerEl.appendChild(makeButton('下一页 ›', page < pages, function () { jumpTo(key, page + 1); }));
+    pagerEl.appendChild(el('span', 'pager-info', '第 ' + page + ' / ' + pages + ' 页'));
+
+    if (scroll) {
+      window.scrollTo({
+        top: listEl.getBoundingClientRect().top + window.pageYOffset - 96,
+        behavior: 'smooth'
+      });
+    }
+  }
+
+  function init() {
+    ['qq', 'ne'].forEach(function (key) {
+      var counter = document.querySelector('.js-count[data-count="' + key + '"]');
+      if (counter) counter.textContent = String((TS_PLAYLISTS[key] || []).length);
+      render(key, false);
+    });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+  } else {
+    init();
+  }
+})();
+</script>
+
+</body>
+</html>
