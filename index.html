@@ -1775,14 +1775,37 @@
     }
 
     /* ---- 5. 显示 / 隐藏 ---- */
+
+    /* 离开首页前记下滚动位置。切到阅读页时 #home 被 display:none 隐藏，
+       整个文档一下子变短，浏览器会把滚动位置夹回顶部——等回来时早就没得还原了。
+       所以必须在隐藏**之前**取。
+       -1 表示本次还没离开过首页，用来区分「首次加载」：那种情况不该插手，
+       交给浏览器自己的滚动恢复。 */
+    var homeScroll = -1;
+
+    function rememberHomeScroll() {
+      if (!home.classList.contains('hidden')) {
+        homeScroll = window.scrollY || window.pageYOffset || 0;
+      }
+    }
+
     function showHome() {
       reader.classList.add('hidden');
       music.classList.add('hidden');
       home.classList.remove('hidden');
       document.title = ORIGINAL_TITLE;
+
+      // 还原到离开时的位置。放到下一帧：首页刚取消隐藏，这一帧的高度还没重新算出来，
+      // 立刻滚会被当成越界而夹回顶部。
+      if (homeScroll >= 0) {
+        var y = homeScroll;
+        var raf = window.requestAnimationFrame || function (f) { f(); };
+        raf(function () { window.scrollTo(0, y); });
+      }
     }
 
     function showTOC(workId) {
+      rememberHomeScroll();
       home.classList.add('hidden');
       music.classList.add('hidden');
       reader.classList.remove('hidden');
@@ -1794,6 +1817,7 @@
     }
 
     function showChapter(workId, index) {
+      rememberHomeScroll();
       home.classList.add('hidden');
       music.classList.add('hidden');
       reader.classList.remove('hidden');
@@ -1804,6 +1828,7 @@
     }
 
     function showMusic() {
+      rememberHomeScroll();
       home.classList.add('hidden');
       reader.classList.add('hidden');
       music.classList.remove('hidden');
