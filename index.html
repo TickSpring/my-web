@@ -439,6 +439,38 @@
   html.dark .ts-x { color: #928E86; }
   .ts-x:hover { color: #B4472F; }
 
+  /* 新建 / 编辑 两档切换 */
+  .ts-modes { display: flex; gap: 8px; }
+  .ts-mode {
+    height: 32px;
+    padding: 0 14px;
+    border: 1px solid #E8E4DC;
+    border-radius: 8px;
+    background: transparent;
+    color: #6E6A63;
+    font-family: inherit;
+    font-size: 12.5px;
+    letter-spacing: .04em;
+    line-height: 1;
+    cursor: pointer;
+    transition: border-color .25s ease, color .25s ease;
+  }
+  html.dark .ts-mode { border-color: #2B2A27; color: #928E86; }
+  .ts-mode:hover { border-color: #B4472F; color: #B4472F; }
+  .ts-mode.is-on { border-color: #B4472F; color: #B4472F; }
+
+  /* 章节下拉下面那行小字提示 */
+  .ts-hint {
+    display: block;
+    margin-top: 8px;
+    font-size: 12px;
+    line-height: 1.7;
+    color: #6E6A63;
+  }
+  html.dark .ts-hint { color: #928E86; }
+  .ts-hint.is-err { color: #B4472F; }
+  html.dark .ts-hint.is-err { color: #C9603F; }
+
   .ts-sub { margin-top: 10px; font-size: 12px; letter-spacing: .04em; color: #6E6A63; }
   html.dark .ts-sub { color: #928E86; }
 
@@ -1894,6 +1926,20 @@ function tsOpenInApp(scheme, webUrl) {
 
     <p id="tsWork" class="ts-sub"></p>
 
+    <div class="ts-row">
+      <span class="ts-label">要做什么</span>
+      <div id="tsMode" class="ts-modes">
+        <button type="button" class="ts-mode" data-mode="create">新建一章</button>
+        <button type="button" class="ts-mode" data-mode="edit">编辑已有章节</button>
+      </div>
+    </div>
+
+    <label class="ts-row" id="tsChapterRow" style="display:none">
+      <span class="ts-label">编辑哪一章</span>
+      <select id="tsChapter" class="ts-select"></select>
+      <span id="tsChapterHint" class="ts-hint"></span>
+    </label>
+
     <div class="ts-grid">
       <label class="ts-row">
         <span class="ts-label">标题</span>
@@ -1906,7 +1952,7 @@ function tsOpenInApp(scheme, webUrl) {
       </label>
     </div>
 
-    <label class="ts-row">
+    <label class="ts-row" id="tsPosRow">
       <span class="ts-label">插入位置</span>
       <select id="tsPos" class="ts-select">
         <option value="append">接在该作品现有章节的最后面</option>
@@ -1967,19 +2013,30 @@ function tsOpenInApp(scheme, webUrl) {
   var WORKS     = { qu: '驱灵师', pian: '片段', her: '赫尔加探案集', notes: '哲学笔记' };
   var TOKEN_KEY = 'ts_pub_token';
 
-  var addBtn   = document.getElementById('tsAddBtn');
-  var workEl   = document.getElementById('tsWork');
-  var titleEl  = document.getElementById('tsTitle');
-  var dateEl   = document.getElementById('tsDate');
-  var posEl    = document.getElementById('tsPos');
-  var bodyEl   = document.getElementById('tsBody');
-  var prevEl   = document.getElementById('tsPreview');
-  var tokenEl  = document.getElementById('tsToken');
-  var statusEl = document.getElementById('tsStatus');
-  var submitEl = document.getElementById('tsSubmit');
+  var addBtn      = document.getElementById('tsAddBtn');
+  var workEl      = document.getElementById('tsWork');
+  var modeEl      = document.getElementById('tsMode');
+  var chapterRow  = document.getElementById('tsChapterRow');
+  var chapterEl   = document.getElementById('tsChapter');
+  var chapterHint = document.getElementById('tsChapterHint');
+  var posRow      = document.getElementById('tsPosRow');
+  var headEl      = document.getElementById('tsModalTitle');
+  var titleEl     = document.getElementById('tsTitle');
+  var dateEl      = document.getElementById('tsDate');
+  var posEl       = document.getElementById('tsPos');
+  var bodyEl      = document.getElementById('tsBody');
+  var prevEl      = document.getElementById('tsPreview');
+  var tokenEl     = document.getElementById('tsToken');
+  var statusEl    = document.getElementById('tsStatus');
+  var submitEl    = document.getElementById('tsSubmit');
 
   var isOpen    = false;
-  var published = false;   // 发成功后锁住按钮，改了标题或正文才解锁，防重复发
+  var published = false;   // 提交成功后锁住按钮，改了内容才解锁，防重复提交
+  var mode      = 'create';       // 'create' | 'edit'
+  var editIndex = -1;             // 编辑模式：改的是该作品的第几章
+  var loaded    = null;           // 载入时的原样，用于判「改过没有」和提交校验
+  var blocked   = false;          // 选中的是 HTML 排版章节，禁止保存
+  var clientId  = newClientId();  // 新增的幂等标识：同一份内容重试不会发两遍
 
   /* 作品 id 直接从地址栏拿，不跟路由共享状态 */
   function currentWork() {
@@ -2003,26 +2060,140 @@ function tsOpenInApp(scheme, webUrl) {
     prevEl.innerHTML = html || '<p class="ts-empty">正文贴进来后，这里会显示排版效果。</p>';
   }
 
+  /* ---------- 编辑模式：直接读 #library，不跟路由脚本共享状态 ---------- */
+
+  /* 取当前作品的章节列表。判断「是不是 HTML 排版」的式子必须和阅读器
+     完全一致，否则编辑器和阅读器会对同一章有不同看法。 */
+  function workChapters(id) {
+    var out = [];
+    document.querySelectorAll('#library .chapter').forEach(function (sec) {
+      if (sec.getAttribute('data-work-id') !== id) return;
+      out.push({
+        title: sec.getAttribute('data-title') || '',
+        date:  sec.getAttribute('data-date') || '',
+        // 去掉首尾那两个框架换行，拿到的就是纯正文
+        body:  String(sec.textContent).replace(/^\n/, '').replace(/\n[ \t]*$/, ''),
+        html:  sec.children.length > 0 && sec.getAttribute('data-format') !== 'text'
+      });
+    });
+    return out;
+  }
+
+  function chapterLabel(i, ch) {
+    return (i + 1 < 10 ? '0' + (i + 1) : String(i + 1)) + '　' +
+           (ch.title || '（无标题）') +
+           (ch.date ? ' · ' + ch.date : '') +
+           (ch.html ? '　（HTML 排版，不支持网页编辑）' : '');
+  }
+
+  function fillChapters(list) {
+    chapterEl.innerHTML = '';
+    list.forEach(function (ch, i) {
+      var o = document.createElement('option');
+      o.value = String(i);
+      o.textContent = chapterLabel(i, ch);
+      if (ch.html) o.disabled = true;    // 干脆选不中，避免误存把标签吃掉
+      chapterEl.appendChild(o);
+    });
+  }
+
+  function loadChapter(i) {
+    var list = workChapters(currentWork());
+    var ch   = list[i];
+    if (!ch) return;
+
+    editIndex = i;
+    loaded    = { title: ch.title, date: ch.date, body: ch.body, total: list.length };
+    blocked   = ch.html;
+
+    titleEl.value = ch.title;
+    dateEl.value  = ch.date;
+    bodyEl.value  = ch.body;
+    renderPreview();
+
+    chapterHint.textContent = blocked
+      ? '这一章是用 HTML 标签排版的。网页编辑器只能存纯文本，会把标签丢掉，所以不开放编辑——请去 GitHub 改这一章。'
+      : '';
+    chapterHint.className = 'ts-hint' + (blocked ? ' is-err' : '');
+
+    published = false;
+    submitEl.disabled = blocked;
+    setStatus('');
+  }
+
+  /* 字段跟载入时不一致才算改过，用于切换章节/关闭时提醒 */
+  function isDirty() {
+    if (mode !== 'edit' || !loaded) return false;
+    return titleEl.value !== loaded.title ||
+           dateEl.value  !== loaded.date  ||
+           bodyEl.value  !== loaded.body;
+  }
+
+  function setMode(m) {
+    mode = m;
+    Array.prototype.forEach.call(modeEl.querySelectorAll('.ts-mode'), function (b) {
+      b.classList.toggle('is-on', b.getAttribute('data-mode') === m);
+    });
+
+    var editing = (m === 'edit');
+    chapterRow.style.display = editing ? '' : 'none';
+    posRow.style.display     = editing ? 'none' : '';
+    headEl.textContent       = editing ? '编辑章节' : '添加章节';
+    submitEl.textContent     = editing ? '保存修改' : '发布';
+    setStatus('');
+
+    if (!editing) {
+      editIndex = -1; loaded = null; blocked = false;
+      published = false;
+      submitEl.disabled = false;
+      titleEl.value = '';
+      dateEl.value  = today();
+      bodyEl.value  = '';
+      chapterHint.textContent = '';
+      chapterHint.className = 'ts-hint';
+      renderPreview();
+      titleEl.focus();
+      return;
+    }
+
+    var list = workChapters(currentWork());
+    fillChapters(list);
+
+    if (!list.length) {
+      editIndex = -1; loaded = null; blocked = false;
+      chapterHint.textContent = '这部作品还没有章节。先用「新建一章」发一篇。';
+      chapterHint.className = 'ts-hint is-err';
+      submitEl.disabled = true;
+      return;
+    }
+
+    // 默认选第一个能编辑的；全是 HTML 排版就停在第一项（它会拒绝保存）
+    var first = 0;
+    for (var i = 0; i < list.length; i++) { if (!list[i].html) { first = i; break; } }
+    chapterEl.value = String(first);
+    loadChapter(first);
+  }
+
   function enableSubmit() {
     published = false;
-    submitEl.disabled = false;
+    if (!blocked) submitEl.disabled = false;
+    // 内容变了就换一个幂等标识，否则第二次发会被后端当成「同一份」而拒收
+    clientId = newClientId();
   }
 
   function open() {
     var id = currentWork();
     if (!id) return;
-    workEl.textContent = '将添加到《' + WORKS[id] + '》';
-    if (!dateEl.value) dateEl.value = today();
+    workEl.textContent = '《' + WORKS[id] + '》';
     try { tokenEl.value = sessionStorage.getItem(TOKEN_KEY) || ''; } catch (e) {}
-    setStatus('');
-    renderPreview();
     modal.classList.add('is-open');
     modal.setAttribute('aria-hidden', 'false');
     isOpen = true;
-    titleEl.focus();
+    setMode('create');   // 每次打开都从「新建」开始，不留下上次的编辑状态
   }
 
   function close() {
+    if (isDirty() && !window.confirm('有还没保存的修改，关掉就丢了。确定关闭吗？')) return;
     modal.classList.remove('is-open');
     modal.setAttribute('aria-hidden', 'true');
     isOpen = false;
@@ -2050,7 +2221,17 @@ function tsOpenInApp(scheme, webUrl) {
       upstream_auth:        'GitHub 授权失败，令牌可能过期了。',
       upstream_read:        '读不到 GitHub 上的文件。',
       upstream_write:       '写不进 GitHub。',
-      bad_json:             '提交的数据不是合法 JSON。'
+      bad_json:             '提交的数据不是合法 JSON。',
+      // —— 编辑特有的 ——
+      chapter_list_changed: '这一部作品的章节数变了，序号可能已经错位。刷新页面再来。',
+      index_out_of_range:   '那一章找不到了。刷新页面再来。',
+      target_title_mismatch:'线上这一章的标题和你打开页面时不一样了。可能已经在别处改过——先刷新看看是不是其实已经保存成功了。',
+      target_date_mismatch: '线上这一章的日期和你打开页面时不一样了。可能已经在别处改过——先刷新看看是不是其实已经保存成功了。',
+      not_text_body:        '这一章是用 HTML 标签排版的，网页编辑器会把标签丢掉，所以不开放编辑。请去 GitHub 改这一章。',
+      bad_index:            '章节序号不对。刷新页面再来。',
+      bad_expect_total:     '提交信息不完整。刷新页面再来。',
+      bad_expect_target:    '提交信息不完整。刷新页面再来。',
+      replace_failed:       '替换受阻，已中止——线上文件没有被改动。'
     };
     return map[code] || ('没成功（' + (code || ('HTTP ' + status)) + '）。');
   }
@@ -2065,6 +2246,19 @@ function tsOpenInApp(scheme, webUrl) {
   syncAddBtn();
 
   addBtn.addEventListener('click', open);
+
+  modeEl.addEventListener('click', function (e) {
+    var b = e.target.closest && e.target.closest('.ts-mode');
+    if (b) setMode(b.getAttribute('data-mode'));
+  });
+
+  chapterEl.addEventListener('change', function () {
+    if (isDirty() && !window.confirm('切换章节会丢掉当前还没保存的修改，继续吗？')) {
+      chapterEl.value = String(editIndex);   // 取消就把下拉拨回去
+      return;
+    }
+    loadChapter(parseInt(chapterEl.value, 10));
+  });
 
   modal.addEventListener('click', function (e) {
     if (e.target.hasAttribute('data-ts-close')) close();
@@ -2095,6 +2289,27 @@ function tsOpenInApp(scheme, webUrl) {
 
     try { sessionStorage.setItem(TOKEN_KEY, token); } catch (e) {}
 
+    var payload = {
+      workId:   id,
+      title:    title,
+      date:     date,
+      text:     body,
+      clientId: clientId
+    };
+
+    if (mode === 'edit') {
+      if (editIndex < 0 || !loaded) { setStatus('请先选择要编辑的章节。', 'err'); return; }
+      // expect* 是「打开页面时那一章长什么样」，用来让后端确认没改错章节。
+      // 注意送的是载入时的值，不是编辑框里现在的值。
+      payload.action      = 'edit';
+      payload.index       = editIndex;
+      payload.expectTotal = loaded.total;
+      payload.expectTitle = loaded.title;
+      payload.expectDate  = loaded.date;
+    } else {
+      payload.position = posEl.value;
+    }
+
     submitEl.disabled = true;
     setStatus('正在提交……');
 
@@ -2104,14 +2319,7 @@ function tsOpenInApp(scheme, webUrl) {
         'content-type': 'application/json',
         'authorization': 'Bearer ' + token
       },
-      body: JSON.stringify({
-        workId:   id,
-        title:    title,
-        date:     date,
-        text:     body,
-        position: posEl.value,
-        clientId: newClientId()
-      })
+      body: JSON.stringify(payload)
     }).then(function (res) {
       return res.json().catch(function () { return {}; }).then(function (data) {
         return { ok: res.ok, status: res.status, data: data };
@@ -2121,7 +2329,16 @@ function tsOpenInApp(scheme, webUrl) {
       if (r.ok && d.status === 'committed') {
         published = true;
         submitEl.disabled = true;
-        setStatus('✓ 已提交（' + String(d.commit || '').slice(0, 7) +
+        // 编辑成功后就地把基准更新掉，这样紧接着再改一次不会被当成「线上已经变了」
+        if (mode === 'edit' && loaded) {
+          loaded.title = title;
+          loaded.date  = date;
+          loaded.body  = body;
+          var opt = chapterEl.options[chapterEl.selectedIndex];
+          if (opt) opt.textContent = chapterLabel(editIndex, { title: title, date: date, html: false });
+        }
+        setStatus('✓ ' + (mode === 'edit' ? '修改已提交' : '已提交') +
+                  '（' + String(d.commit || '').slice(0, 7) +
                   '）。约 1 分钟后上线，刷新时记得 Ctrl + Shift + R。', 'ok');
       } else if (r.ok && d.status === 'exists') {
         published = true;

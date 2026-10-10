@@ -102,8 +102,18 @@ function scanSections(src) {
   let m;
   while ((m = re.exec(src)) !== null) {
     if (m.index >= close) break;
-    const w = /data-work-id="([^"]*)"/.exec(m[1]);
-    hits.push({ at: m.index, work: w ? w[1] : '' });
+    const a = m[1];
+    const pick = function (name) {
+      const r = new RegExp(name + '="([^"]*)"').exec(a);
+      return r ? r[1] : '';
+    };
+    hits.push({
+      at:    m.index,
+      work:  pick('data-work-id'),
+      title: pick('data-title'),
+      date:  pick('data-date'),
+      id:    pick('data-id')     // 手写的章节没有这个属性，会是空串
+    });
   }
   return { hits: hits, open: open, close: close };
 }
@@ -138,7 +148,8 @@ function buildSection(fields) {
   return '  <section class="chapter" data-work-id="' + fields.workId +
          '" data-title="' + attr(fields.title) +
          '" data-date="' + attr(fields.date || '') +
-         '" data-id="' + attr(fields.id) + '">\n' +
+         (fields.id ? '" data-id="' + attr(fields.id) : '') +
+         '">\n' +
          textNode(fields.text) + '\n' +
          '  </section>\n';
 }
@@ -181,6 +192,95 @@ function validate(oldSrc, newSrc, snippet, clientId, workId, mode) {
   if (mode === 'prepend' ? mineIdx !== 0 : mineIdx !== total - 1) {
     throw new Error('wrong-position');
   }
+}
+
+/* ---------------- 编辑：定位要改写的那一段 ----------------
+
+   编辑比新增危险得多。新增最坏是加错位置，编辑最坏是
+   「把第 3 章的内容写进了第 5 章」。所以用几道闸把目标锁死，
+   任何一道不过就中止，绝不猜。                              */
+
+/* attr() 和 textNode() 写出去的转义在这里还原，
+   好和浏览器 getAttribute / textContent 拿到的值对齐。
+   &amp; 必须最后换，否则 &amp;lt; 这类会被二次解码错。 */
+function decodeText(s) {
+  return String(s)
+    .replace(/&lt;/g, '<')
+    .replace(/&gt;/g, '>')
+    .replace(/&quot;/g, '"')
+    .replace(/&amp;/g, '&');
+}
+
+function locateSection(src, workId, index, expectTotal, expectTitle, expectDate) {
+  const found = scanSections(src);
+  const mine  = found.hits.filter(h => h.work === workId);
+
+  // 闸一：该作品的章节总数变了，序号就可能已经错位
+  if (mine.length !== expectTotal) throw new Error('chapter_list_changed');
+  if (index < 0 || index >= mine.length) throw new Error('index_out_of_range');
+
+  const target = mine[index];
+
+  // 闸二、闸三：这个序号上的标题、日期对不上。
+  // 光比标题不够——「总数没变但顺序挪了一位」时，只要两章重名就能蒙混过去，
+  // 而三部小说各有一章都叫「空白1」，重名是真会发生的。日期是唯一的区分。
+  if (decodeText(target.title) !== expectTitle) throw new Error('target_title_mismatch');
+  if (decodeText(target.date)  !== expectDate)  throw new Error('target_date_mismatch');
+
+  // 起点：该标签所在行的行首，连缩进一起换掉，保证对齐。
+  // 若行首到标签之间还夹着别的东西，回退就会把它一起吞掉——中止。
+  const nlStart = src.lastIndexOf('\n', target.at - 1);
+  const start   = nlStart < 0 ? 0 : nlStart + 1;
+  if (src.slice(start, target.at).trim() !== '') throw new Error('unexpected-section-start');
+
+  // 终点：该段的闭合标签。搜索**卡上界**——最多找到下一个章节的开标签
+  // （或 #library 结束）为止，不往文件末尾一路找，免得万一正文异常时吞掉邻章。
+  const nextHit = found.hits.find(h => h.at > target.at);
+  const limit   = nextHit ? nextHit.at : found.close;
+  const rel     = src.slice(target.at, limit).match(/<\/section\s*>/);
+  if (!rel) throw new Error('section_close_not_found');
+
+  const closeStart = target.at + rel.index;
+  const end        = closeStart + rel[0].length;   // 不含其后的换行
+
+  // 闸四：正文里出现真正的标签，说明这一章是用 HTML 排版的。
+  // 换成纯文本会把 <p> 之类的结构吃掉，直接拒绝。
+  // 转义过的 &lt; 以 & 开头，不会误判。
+  const gt   = src.indexOf('>', target.at);
+  const body = src.slice(gt + 1, closeStart);
+  if (/<[a-zA-Z/!]/.test(body)) throw new Error('not_text_body');
+
+  return {
+    start: start,
+    end:   end,
+    total: mine.length,
+    id:    target.id        // 原有 id 原样保留；没有就继续没有
+  };
+}
+
+/* 编辑提交前的硬门槛。跟新增那条不同：编辑是「等量替换」。 */
+function validateReplace(src, next, snippet, loc, workId, index, title) {
+  if (next.length !== src.length - (loc.end - loc.start) + snippet.length) {
+    throw new Error('length-arithmetic');
+  }
+
+  // 替换区之外逐字节相同 —— 这两条才是真正兜底的：
+  // 合起来证明只有那一段被换掉，别的字节一个都没动。
+  if (next.slice(0, loc.start) !== src.slice(0, loc.start))          throw new Error('bytes-before-changed');
+  if (next.slice(loc.start + snippet.length) !== src.slice(loc.end)) throw new Error('bytes-after-changed');
+
+  if (countSections(next) !== countSections(src))                    throw new Error('section-count-changed');
+  if (next.indexOf('</div><!-- /#library -->') < 0)                  throw new Error('library-close-lost');
+  if (!next.trimEnd().endsWith('</html>'))                           throw new Error('html-tail-lost');
+
+  // 独立复核：新章节必须落在同一个缩进列上，且标题确实是新的
+  const mine = scanSections(next).hits.filter(h => h.work === workId);
+  if (mine.length !== loc.total)                                     throw new Error('work-count-changed');
+
+  const lead   = snippet.length - snippet.replace(/^[ \t]*/, '').length;
+  const target = mine[index];
+  if (!target || target.at !== loc.start + lead)                     throw new Error('wrong-position');
+  if (decodeText(target.title) !== title)                            throw new Error('target-title-not-updated');
 }
 
 /* ---------------- GitHub ---------------- */
@@ -238,13 +338,18 @@ export async function onRequestPost(context) {
   let p;
   try { p = await request.json(); } catch (e) { return json({ error: 'bad_json' }, 400); }
 
-  const workId   = String(p.workId || '');
-  const title    = String(p.title || '').trim();
-  const date     = String(p.date || '').trim();
-  const text     = String(p.text == null ? '' : p.text);
-  const clientId = String(p.clientId || '').trim();
-  const mode     = p.position === 'append' ? 'append' : 'prepend';
-  const dryRun   = p.dryRun === true;
+  const action      = p.action === 'edit' ? 'edit' : 'create';
+  const workId      = String(p.workId || '');
+  const title       = String(p.title || '').trim();
+  const date        = String(p.date || '').trim();
+  const text        = String(p.text == null ? '' : p.text);
+  const clientId    = String(p.clientId || '').trim();
+  const mode        = p.position === 'append' ? 'append' : 'prepend';
+  const dryRun      = p.dryRun === true;
+  const index       = Number(p.index);
+  const expectTotal = Number(p.expectTotal);
+  const expectTitle = p.expectTitle == null ? null : String(p.expectTitle);
+  const expectDate  = p.expectDate  == null ? null : String(p.expectDate);
 
   if (!WORKS.has(workId))                            return json({ error: 'bad_work_id' }, 400);
   if (!title)                                        return json({ error: 'empty_title' }, 400);
@@ -252,8 +357,15 @@ export async function onRequestPost(context) {
   if (!/^[A-Za-z0-9_-]{8,64}$/.test(clientId))       return json({ error: 'bad_client_id' }, 400);
   if (date && !/^\d{4}\.\d{2}\.\d{2}$/.test(date))   return json({ error: 'bad_date' }, 400);
   if (new TextEncoder().encode(text).length > MAX_BODY_BYTES) return json({ error: 'too_large' }, 413);
+  // 编辑要多带三样：第几章、那一章当时的总数、以及它的标题和日期。
+  // 后三样是防「改错章节」的闸，缺一样都不能放行。
+  if (action === 'edit') {
+    if (!Number.isInteger(index) || index < 0)             return json({ error: 'bad_index' }, 400);
+    if (!Number.isInteger(expectTotal) || expectTotal < 0) return json({ error: 'bad_expect_total' }, 400);
+    if (expectTitle === null || expectDate === null)       return json({ error: 'bad_expect_target' }, 400);
+  }
 
-  const snippet = buildSection({ workId: workId, title: title, date: date, text: text, id: clientId });
+  const createSnippet = buildSection({ workId: workId, title: title, date: date, text: text, id: clientId });
 
   // 最多三轮。409/422 说明文件在别处被改过，重取一次 sha 再拼，
   // 这样即使你正好在本地推了东西，也不会把对方的改动冲掉。
@@ -279,29 +391,58 @@ export async function onRequestPost(context) {
       src = await raw.text();
     }
 
-    // 幂等：同一个 clientId 已经发过了就不再发第二遍
-    if (src.indexOf('data-id="' + clientId + '"') !== -1) {
-      return json({ status: 'exists', clientId: clientId }, 200);
-    }
+    let at, next, snippet, before = '';
 
-    let at, next;
-    try {
-      at   = insertionPoint(src, workId, mode);
-      next = src.slice(0, at) + snippet + src.slice(at);
-      validate(src, next, snippet, clientId, workId, mode);
-    } catch (e) {
-      return json({ error: 'splice_failed', detail: String(e && e.message) }, 500);
+    if (action === 'edit') {
+      let loc;
+      try {
+        loc = locateSection(src, workId, index, expectTotal, expectTitle, expectDate);
+      } catch (e) {
+        // 被闸拦下：把具体是哪一道闸原样告诉前端
+        const code = String(e && e.message);
+        return json({ error: code }, code === 'not_text_body' ? 400 : 409);
+      }
+
+      // 末尾那个换行去掉：替换区间到 </section> 为止、不含它后面的换行，
+      // 这样段与段之间那个空行分隔符原样保留，不会被越换越乱。
+      snippet = buildSection({
+        workId: workId, title: title, date: date, text: text, id: loc.id
+      }).replace(/\n$/, '');
+
+      before = src.slice(loc.start, loc.end);
+      at     = loc.start;
+      next   = src.slice(0, loc.start) + snippet + src.slice(loc.end);
+
+      try {
+        validateReplace(src, next, snippet, loc, workId, index, title);
+      } catch (e) {
+        return json({ error: 'replace_failed', detail: String(e && e.message) }, 500);
+      }
+    } else {
+      // 幂等：同一个 clientId 已经发过了就不再发第二遍
+      if (src.indexOf('data-id="' + clientId + '"') !== -1) {
+        return json({ status: 'exists', clientId: clientId }, 200);
+      }
+
+      snippet = createSnippet;
+      try {
+        at   = insertionPoint(src, workId, mode);
+        next = src.slice(0, at) + snippet + src.slice(at);
+        validate(src, next, snippet, clientId, workId, mode);
+      } catch (e) {
+        return json({ error: 'splice_failed', detail: String(e && e.message) }, 500);
+      }
     }
 
     if (dryRun) {
-      return json({ status: 'dry_run', section: snippet, at: at }, 200);
+      return json({ status: 'dry_run', section: snippet, at: at, before: before }, 200);
     }
 
     const putRes = await gh(env, repoPath(env), {
       method: 'PUT',
       headers: { 'content-type': 'application/json' },
       body: JSON.stringify({
-        message: '发布：' + workId + ' · ' + title,
+        message: (action === 'edit' ? '修改：' : '发布：') + workId + ' · ' + title,
         content: utf8ToBase64(next),
         sha: meta.sha,
         branch: BRANCH
