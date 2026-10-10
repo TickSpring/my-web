@@ -1015,8 +1015,10 @@
       <p id="tocDesc" class="mt-6 text-[14.5px] font-light leading-[2] text-muted dark:text-nightMuted"></p>
       <ol id="tocList" class="mt-12 border-t border-line dark:border-nightLine"></ol>
 
-      <!-- 发布入口。只出现在目录页，切到正文页会跟着 #tocView 一起隐藏 -->
-      <button type="button" id="tsAddBtn" class="ts-add-btn">＋ 添加章节</button>
+      <!-- 发布入口。只出现在目录页，切到正文页会跟着 #tocView 一起隐藏。
+           默认藏起来，脚本确认当前地址确实指向某个已知作品后才显示——
+           否则地址被人改坏时会冒出一个点了没反应的按钮。 -->
+      <button type="button" id="tsAddBtn" class="ts-add-btn" style="display:none">＋ 添加章节</button>
     </div>
 
     <!-- 正文视图 -->
@@ -1999,6 +2001,15 @@ function tsOpenInApp(scheme, webUrl) {
     };
     return map[code] || ('没成功（' + (code || ('HTTP ' + status)) + '）。');
   }
+
+  /* 只在地址确实指向一个已知作品时才露出按钮。
+     地址被改坏时（例如在地址栏里手输、输入法把中文带了进去）
+     整个藏起来，而不是留一个点了没反应的按钮让人猜。 */
+  function syncAddBtn() {
+    addBtn.style.display = currentWork() ? '' : 'none';
+  }
+  window.addEventListener('hashchange', syncAddBtn);
+  syncAddBtn();
 
   addBtn.addEventListener('click', open);
 
