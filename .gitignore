@@ -4,6 +4,9 @@ CLAUDE.md
 # VS Code 的本地设置
 .vscode/
 
+# 本地调试 Pages Function 用的密钥文件（对应线上那四个环境变量）
+.dev.vars
+
 # 系统杂项
 .DS_Store
 Thumbs.db

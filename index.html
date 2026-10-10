@@ -362,6 +362,215 @@
     .music-note { animation: none; }
     .music-in { animation: none; }
   }
+
+  /* ---------- 发布章节：目录页的「添加」按钮 ---------- */
+  .ts-add-btn {
+    margin-top: 30px;
+    height: 32px;
+    padding: 0 15px;
+    border: 1px solid #E8E4DC;
+    border-radius: 8px;
+    background: transparent;
+    color: #6E6A63;
+    font-family: inherit;
+    font-size: 12.5px;
+    line-height: 1;
+    letter-spacing: .04em;
+    cursor: pointer;
+    transition: border-color .25s ease, color .25s ease;
+  }
+  html.dark .ts-add-btn { border-color: #2B2A27; color: #928E86; }
+  .ts-add-btn:hover { border-color: #B4472F; color: #B4472F; }
+
+  /* ---------- 发布章节：弹窗 ---------- */
+  .ts-modal {
+    position: fixed;
+    inset: 0;
+    z-index: 90;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+  }
+  .ts-modal.is-open { display: flex; }
+
+  .ts-backdrop {
+    position: absolute;
+    inset: 0;
+    background: rgba(38, 37, 31, .36);
+    -webkit-backdrop-filter: blur(2px);
+    backdrop-filter: blur(2px);
+  }
+  html.dark .ts-backdrop { background: rgba(0, 0, 0, .58); }
+
+  .ts-panel {
+    position: relative;
+    width: 100%;
+    max-width: 640px;
+    max-height: 88vh;
+    overflow-y: auto;
+    padding: 26px 28px 22px;
+    border: 1px solid #E8E4DC;
+    border-radius: 12px;
+    background: #FAF9F6;
+    color: #26251F;
+    box-shadow: 0 18px 48px rgba(38, 37, 31, .18);
+  }
+  html.dark .ts-panel {
+    border-color: #2B2A27;
+    background: #111110;
+    color: #E2DFD8;
+    box-shadow: 0 18px 48px rgba(0, 0, 0, .55);
+  }
+
+  .ts-head { display: flex; align-items: baseline; justify-content: space-between; gap: 16px; }
+  .ts-title { font-size: 1.05rem; font-weight: 500; letter-spacing: .04em; }
+  .ts-x {
+    padding: 0 4px;
+    border: 0;
+    background: transparent;
+    color: #6E6A63;
+    font-family: inherit;
+    font-size: 20px;
+    line-height: 1;
+    cursor: pointer;
+    transition: color .25s ease;
+  }
+  html.dark .ts-x { color: #928E86; }
+  .ts-x:hover { color: #B4472F; }
+
+  .ts-sub { margin-top: 10px; font-size: 12px; letter-spacing: .04em; color: #6E6A63; }
+  html.dark .ts-sub { color: #928E86; }
+
+  .ts-row { display: block; margin-top: 18px; }
+  .ts-label {
+    display: block;
+    margin-bottom: 7px;
+    font-size: 11px;
+    letter-spacing: .18em;
+    color: #6E6A63;
+  }
+  html.dark .ts-label { color: #928E86; }
+
+  .ts-grid { display: grid; grid-template-columns: 1fr 150px; gap: 14px; }
+
+  .ts-input,
+  .ts-select,
+  .ts-area {
+    width: 100%;
+    padding: 9px 11px;
+    border: 1px solid #E8E4DC;
+    border-radius: 8px;
+    background: transparent;
+    color: inherit;
+    font-family: inherit;
+    font-size: 13.5px;
+    line-height: 1.7;
+    outline: none;
+    transition: border-color .25s ease;
+  }
+  html.dark .ts-input,
+  html.dark .ts-select,
+  html.dark .ts-area { border-color: #2B2A27; }
+  .ts-input:focus,
+  .ts-select:focus,
+  .ts-area:focus { border-color: #B4472F; }
+  .ts-area { min-height: 220px; resize: vertical; line-height: 1.85; }
+  .ts-select { appearance: none; -webkit-appearance: none; cursor: pointer; }
+
+  /* 正文的排版约定说明 */
+  .ts-help { margin-top: 14px; font-size: 12px; line-height: 1.9; color: #6E6A63; }
+  html.dark .ts-help { color: #928E86; }
+  .ts-help summary { cursor: pointer; letter-spacing: .04em; }
+  .ts-help ul { margin: 10px 0 0; padding-left: 18px; line-height: 2; }
+  .ts-help code {
+    padding: 1px 5px;
+    border: 1px solid #E8E4DC;
+    border-radius: 4px;
+    font-family: ui-monospace, Menlo, Consolas, monospace;
+    font-size: 11.5px;
+  }
+  html.dark .ts-help code { border-color: #2B2A27; }
+
+  /* 预览区，排版规则跟正文页一致 */
+  .ts-preview {
+    max-height: 260px;
+    overflow-y: auto;
+    padding: 14px 16px;
+    border: 1px dashed #E8E4DC;
+    border-radius: 8px;
+    font-size: 13.5px;
+    line-height: 1.95;
+  }
+  html.dark .ts-preview { border-color: #2B2A27; }
+  .ts-preview p { margin: 0 0 .9em; }
+  .ts-preview p:last-child { margin-bottom: 0; }
+  .ts-preview p.is-indent { text-indent: 2em; }
+  .ts-preview h2,
+  .ts-preview h3,
+  .ts-preview h4 { margin: 1.2em 0 .6em; font-weight: 500; letter-spacing: .04em; }
+  .ts-preview h2 { font-size: 1.05rem; }
+  .ts-preview h3 { font-size: .98rem; }
+  .ts-preview h4 { font-size: .93rem; }
+  .ts-preview blockquote {
+    margin: .9em 0;
+    padding-left: 14px;
+    border-left: 2px solid #B4472F;
+    color: #6E6A63;
+  }
+  html.dark .ts-preview blockquote { color: #928E86; }
+  .ts-preview hr.scene-break {
+    width: 88px;
+    margin: 1.6em auto;
+    border: 0;
+    border-top: 1px solid #E8E4DC;
+  }
+  html.dark .ts-preview hr.scene-break { border-top-color: #2B2A27; }
+  .ts-empty { color: #6E6A63; }
+  html.dark .ts-empty { color: #928E86; }
+
+  .ts-actions {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    margin-top: 22px;
+    padding-top: 18px;
+    border-top: 1px solid #E8E4DC;
+  }
+  html.dark .ts-actions { border-top-color: #2B2A27; }
+
+  .ts-status { flex: 1; font-size: 12px; line-height: 1.7; color: #6E6A63; }
+  html.dark .ts-status { color: #928E86; }
+  .ts-status.is-ok  { color: #5C7A56; }
+  .ts-status.is-err { color: #B4472F; }
+  html.dark .ts-status.is-ok  { color: #8FAE86; }
+  html.dark .ts-status.is-err { color: #C9603F; }
+
+  .ts-btn {
+    flex-shrink: 0;
+    height: 34px;
+    padding: 0 20px;
+    border: 1px solid #B4472F;
+    border-radius: 8px;
+    background: #B4472F;
+    color: #FAF9F6;
+    font-family: inherit;
+    font-size: 13px;
+    letter-spacing: .08em;
+    cursor: pointer;
+    transition: opacity .25s ease;
+  }
+  .ts-btn:hover:not(:disabled) { opacity: .86; }
+  .ts-btn:disabled { opacity: .4; cursor: default; }
+
+  /* 弹窗虽然主要在电脑上用，但读者可能在手机上看目录页，别让它挤坏 */
+  @media (max-width: 639px) {
+    .ts-modal { padding: 12px; }
+    .ts-panel { padding: 20px 18px; }
+    .ts-grid  { grid-template-columns: 1fr; gap: 0; }
+    .ts-grid .ts-row + .ts-row { margin-top: 18px; }
+  }
 </style>
 </head>
 
@@ -568,7 +777,10 @@
         不是论文，只是把一些想不通的事情写下来。写完之后，通常还是想不通
       </p>
 
-      <div class="border-t border-line dark:border-nightLine">
+      <!-- 下面这几行是「没跑 JS 时」的兜底内容。
+           脚本会用 #library 里最新的 5 篇随笔把整个列表重建一遍，
+           所以新发的随笔会自动出现在首页，不需要手工维护这里。 -->
+      <div id="noteList" class="border-t border-line dark:border-nightLine">
 
         <a href="#/read/notes/0" class="reveal note-row group flex items-baseline gap-4 border-b border-line py-5 sm:gap-6 dark:border-nightLine">
           <time class="w-20 shrink-0 text-[11px] tabular-nums tracking-wider text-muted sm:w-24 dark:text-nightMuted">2025.03.14</time>
@@ -802,6 +1014,9 @@
       <h1 id="tocTitle" class="font-serif text-[1.7rem] leading-snug tracking-tight sm:text-[2rem]"></h1>
       <p id="tocDesc" class="mt-6 text-[14.5px] font-light leading-[2] text-muted dark:text-nightMuted"></p>
       <ol id="tocList" class="mt-12 border-t border-line dark:border-nightLine"></ol>
+
+      <!-- 发布入口。只出现在目录页，切到正文页会跟着 #tocView 一起隐藏 -->
+      <button type="button" id="tsAddBtn" class="ts-add-btn">＋ 添加章节</button>
     </div>
 
     <!-- 正文视图 -->
@@ -1196,6 +1411,49 @@
       });
     });
 
+    /* ---- 2.5 首页：用最新的 5 篇随笔重建「哲学笔记」列表 ----
+       首页那段原本是写死的链接，而章节地址是位置式的
+       （#/read/notes/0、/1…），所以往前面插一篇就会全体错位：
+       首页显示旧标题，点开却是另一篇。改成从 #library 现算。
+       注意排序只影响「取哪 5 篇」，链接仍然用它在文件里的真实序号。 */
+    (function () {
+      var box  = document.getElementById('noteList');
+      var list = chapters.notes || [];
+      if (!box || !list.length) return;
+
+      var picked = list.map(function (ch, i) {
+        return { ch: ch, index: i };
+      }).sort(function (a, b) {
+        return String(b.ch.date).localeCompare(String(a.ch.date));
+      }).slice(0, 5);
+
+      while (box.firstChild) box.removeChild(box.firstChild);
+
+      picked.forEach(function (item) {
+        var a = document.createElement('a');
+        a.href = '#/read/notes/' + item.index;
+        /* 这里故意不加 reveal：滚动淡入的观察器在脚本更早的地方
+           一次性抓取了页面已有的 .reveal 元素，之后才插进来的不会
+           被观察，加上就会永远停在透明状态。 */
+        a.className = 'note-row group flex items-baseline gap-4 border-b border-line py-5 sm:gap-6 dark:border-nightLine';
+
+        var t = document.createElement('time');
+        t.className = 'w-20 shrink-0 text-[11px] tabular-nums tracking-wider text-muted sm:w-24 dark:text-nightMuted';
+        t.textContent = item.ch.date;
+
+        var s = document.createElement('span');
+        s.className = 'note-title flex-1 text-[14.5px] font-light leading-relaxed';
+        s.textContent = item.ch.title;
+
+        var g = document.createElement('span');
+        g.className = 'arrow text-accent';
+        g.textContent = '↗';
+
+        a.appendChild(t); a.appendChild(s); a.appendChild(g);
+        box.appendChild(a);
+      });
+    })();
+
     /* ---- 小工具 ---- */
     function makeEl(tag, className, text) {
       var e = document.createElement(tag);
@@ -1367,6 +1625,10 @@
       if (e.key !== 'Escape') return;
       if (/^#\/(read|music)/.test(location.hash)) location.hash = '#/';
     });
+
+    /* 把纯文本转段落的函数暴露出去，给下面的发布表单复用。
+       这样预览效果和正文页最终渲染用的是同一份代码，不会走偏。 */
+    window.TS_TEXT_TO_HTML = textToHTML;
   })();
 </script>
 
@@ -1555,6 +1817,261 @@ function tsOpenInApp(scheme, webUrl) {
   } else {
     init();
   }
+})();
+</script>
+
+
+<!-- ============================================================
+     发布章节弹窗
+
+     只做「新增」。正文按纯文本提交，后端存进去时转义 < & >，
+     打开阅读页时由那套已有的 textToHTML 统一分段——跟 #library
+     里每一章走同一条路径，不引入第二种渲染方式。
+     ============================================================ -->
+<div id="tsModal" class="ts-modal" role="dialog" aria-modal="true" aria-labelledby="tsModalTitle" aria-hidden="true">
+  <div class="ts-backdrop" data-ts-close></div>
+
+  <div class="ts-panel">
+    <div class="ts-head">
+      <h2 id="tsModalTitle" class="ts-title">添加章节</h2>
+      <button type="button" class="ts-x" data-ts-close aria-label="关闭">×</button>
+    </div>
+
+    <p id="tsWork" class="ts-sub"></p>
+
+    <div class="ts-grid">
+      <label class="ts-row">
+        <span class="ts-label">标题</span>
+        <input id="tsTitle" class="ts-input" type="text" placeholder="这一章的标题" />
+      </label>
+
+      <label class="ts-row">
+        <span class="ts-label">日期</span>
+        <input id="tsDate" class="ts-input" type="text" inputmode="numeric" placeholder="2026.10.10" />
+      </label>
+    </div>
+
+    <label class="ts-row">
+      <span class="ts-label">插入位置</span>
+      <select id="tsPos" class="ts-select">
+        <option value="append">接在该作品现有章节的最后面</option>
+        <option value="prepend">插在该作品现有章节的最前面</option>
+      </select>
+    </label>
+
+    <label class="ts-row">
+      <span class="ts-label">正文</span>
+      <textarea id="tsBody" class="ts-area" placeholder="把正文直接粘进来，不用写 HTML 标签。"></textarea>
+    </label>
+
+    <details class="ts-help">
+      <summary>正文的排版约定（点开看）</summary>
+      <ul>
+        <li>空行分段。一行写满就换行，会被自动接回同一段，不用手动断行。</li>
+        <li>段首打一个全角空格（　）→ 这一段缩进两字。</li>
+        <li>行首写 <code>#</code> / <code>##</code> / <code>###</code> → 小标题。</li>
+        <li>行首写 <code>&gt;</code> → 引文。</li>
+        <li>单独一行写 <code>---</code> → 分隔线，用来分场景。</li>
+        <li>正文里的 <code>&lt;</code> 和 <code>&amp;</code> 直接写就行，会被自动转义。</li>
+      </ul>
+    </details>
+
+    <div class="ts-row">
+      <span class="ts-label">预览（跟正文页的排版一致）</span>
+      <div id="tsPreview" class="ts-preview"></div>
+    </div>
+
+    <label class="ts-row">
+      <span class="ts-label">发布口令</span>
+      <input id="tsToken" class="ts-input" type="password" autocomplete="off" placeholder="Cloudflare 里设的那个 PUBLISH_TOKEN" />
+    </label>
+
+    <div class="ts-actions">
+      <p id="tsStatus" class="ts-status"></p>
+      <button type="button" id="tsSubmit" class="ts-btn">发布</button>
+    </div>
+  </div>
+</div>
+
+
+<script>
+/* ============================================================
+   发布章节（新增）
+
+   接口：POST /api/publish（见 functions/api/publish.js）。
+
+   正文按纯文本提交，不在这里转 HTML：后端原样存下（转义 < & >），
+   阅读页打开时再用 textToHTML 分段——和 #library 里已有的每一章
+   完全同一条路径。这里的预览调的是同一个函数，所以预览即所得。
+   ============================================================ */
+(function () {
+  var T2H   = window.TS_TEXT_TO_HTML;
+  var modal = document.getElementById('tsModal');
+  if (!T2H || !modal) return;   // 路由脚本没跑起来就整个关掉
+
+  var WORKS     = { qu: '驱灵师', pian: '片段', her: '赫尔加探案集', notes: '哲学笔记' };
+  var TOKEN_KEY = 'ts_pub_token';
+
+  var addBtn   = document.getElementById('tsAddBtn');
+  var workEl   = document.getElementById('tsWork');
+  var titleEl  = document.getElementById('tsTitle');
+  var dateEl   = document.getElementById('tsDate');
+  var posEl    = document.getElementById('tsPos');
+  var bodyEl   = document.getElementById('tsBody');
+  var prevEl   = document.getElementById('tsPreview');
+  var tokenEl  = document.getElementById('tsToken');
+  var statusEl = document.getElementById('tsStatus');
+  var submitEl = document.getElementById('tsSubmit');
+
+  var isOpen    = false;
+  var published = false;   // 发成功后锁住按钮，改了标题或正文才解锁，防重复发
+
+  /* 作品 id 直接从地址栏拿，不跟路由共享状态 */
+  function currentWork() {
+    var parts = location.hash.replace(/^#\/?/, '').split('/').filter(Boolean);
+    return (parts[0] === 'read' && WORKS[parts[1]]) ? parts[1] : '';
+  }
+
+  function today() {
+    var d = new Date();
+    function p(n) { return (n < 10 ? '0' : '') + n; }
+    return d.getFullYear() + '.' + p(d.getMonth() + 1) + '.' + p(d.getDate());
+  }
+
+  function setStatus(msg, kind) {
+    statusEl.textContent = msg || '';
+    statusEl.className = 'ts-status' + (kind ? ' is-' + kind : '');
+  }
+
+  function renderPreview() {
+    var html = T2H(bodyEl.value || '', 'auto');
+    prevEl.innerHTML = html || '<p class="ts-empty">正文贴进来后，这里会显示排版效果。</p>';
+  }
+
+  function enableSubmit() {
+    published = false;
+    submitEl.disabled = false;
+  }
+
+  function open() {
+    var id = currentWork();
+    if (!id) return;
+    workEl.textContent = '将添加到《' + WORKS[id] + '》';
+    if (!dateEl.value) dateEl.value = today();
+    try { tokenEl.value = sessionStorage.getItem(TOKEN_KEY) || ''; } catch (e) {}
+    setStatus('');
+    renderPreview();
+    modal.classList.add('is-open');
+    modal.setAttribute('aria-hidden', 'false');
+    isOpen = true;
+    titleEl.focus();
+  }
+
+  function close() {
+    modal.classList.remove('is-open');
+    modal.setAttribute('aria-hidden', 'true');
+    isOpen = false;
+  }
+
+  /* 给后端一个唯一标识：万一提交成功但回包丢了，重复点也不会发两遍 */
+  function newClientId() {
+    if (window.crypto && crypto.randomUUID) return crypto.randomUUID();
+    return 'c' + Date.now().toString(36) + Math.random().toString(36).slice(2, 10);
+  }
+
+  function humanize(code, status) {
+    var map = {
+      unauthorized:         '口令不对。',
+      server_misconfigured: '服务端还没配好：Cloudflare 里的 PUBLISH_TOKEN 或 GITHUB_PAT 还没设。',
+      bad_work_id:          '作品 ID 不认识。',
+      empty_title:          '标题不能为空。',
+      empty_body:           '正文不能为空。',
+      bad_date:             '日期格式不对。',
+      bad_client_id:        '提交标识异常，刷新页面重试。',
+      too_large:            '正文太长了（上限 64 KB）。',
+      file_too_big:         'index.html 已经超出接口能读取的大小了。',
+      splice_failed:        '拼接受阻，已中止——线上文件没有被改动。',
+      conflict_exhausted:   '文件刚好被别处改了，重试几次都没成功，稍后再试。',
+      upstream_auth:        'GitHub 授权失败，令牌可能过期了。',
+      upstream_read:        '读不到 GitHub 上的文件。',
+      upstream_write:       '写不进 GitHub。',
+      bad_json:             '提交的数据不是合法 JSON。'
+    };
+    return map[code] || ('没成功（' + (code || ('HTTP ' + status)) + '）。');
+  }
+
+  addBtn.addEventListener('click', open);
+
+  modal.addEventListener('click', function (e) {
+    if (e.target.hasAttribute('data-ts-close')) close();
+  });
+
+  bodyEl.addEventListener('input', renderPreview);
+  bodyEl.addEventListener('input', enableSubmit);
+  titleEl.addEventListener('input', enableSubmit);
+
+  /* Esc 关弹窗。用捕获阶段抢在路由那段「Esc 返回首页」之前执行，
+     否则在阅读页按 Esc 会连人带窗一起弹回首页。 */
+  document.addEventListener('keydown', function (e) {
+    if (e.key === 'Escape' && isOpen) { close(); e.stopPropagation(); }
+  }, true);
+
+  submitEl.addEventListener('click', function () {
+    var id    = currentWork();
+    var title = titleEl.value.trim();
+    var date  = dateEl.value.trim();
+    var body  = bodyEl.value;
+    var token = tokenEl.value.trim();
+
+    if (!id)                 { setStatus('当前不在某个作品的目录页。', 'err'); return; }
+    if (!title)              { setStatus('标题不能为空。', 'err'); titleEl.focus(); return; }
+    if (!/^\d{4}\.\d{2}\.\d{2}$/.test(date)) { setStatus('日期格式应该像 2026.10.10。', 'err'); dateEl.focus(); return; }
+    if (!body.trim())        { setStatus('正文不能为空。', 'err'); bodyEl.focus(); return; }
+    if (!token)              { setStatus('请先填写发布口令。', 'err'); tokenEl.focus(); return; }
+
+    try { sessionStorage.setItem(TOKEN_KEY, token); } catch (e) {}
+
+    submitEl.disabled = true;
+    setStatus('正在提交……');
+
+    fetch('/api/publish', {
+      method: 'POST',
+      headers: {
+        'content-type': 'application/json',
+        'authorization': 'Bearer ' + token
+      },
+      body: JSON.stringify({
+        workId:   id,
+        title:    title,
+        date:     date,
+        text:     body,
+        position: posEl.value,
+        clientId: newClientId()
+      })
+    }).then(function (res) {
+      return res.json().catch(function () { return {}; }).then(function (data) {
+        return { ok: res.ok, status: res.status, data: data };
+      });
+    }).then(function (r) {
+      var d = r.data || {};
+      if (r.ok && d.status === 'committed') {
+        published = true;
+        submitEl.disabled = true;
+        setStatus('✓ 已提交（' + String(d.commit || '').slice(0, 7) +
+                  '）。约 1 分钟后上线，刷新时记得 Ctrl + Shift + R。', 'ok');
+      } else if (r.ok && d.status === 'exists') {
+        published = true;
+        submitEl.disabled = true;
+        setStatus('这一份之前已经提交过了，没有重复发。', 'ok');
+      } else {
+        submitEl.disabled = false;
+        setStatus('✕ ' + humanize(d.error, r.status), 'err');
+      }
+    }).catch(function (err) {
+      submitEl.disabled = false;
+      setStatus('✕ 请求没发出去：' + ((err && err.message) || err), 'err');
+    });
+  });
 })();
 </script>
 
