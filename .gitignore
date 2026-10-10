@@ -1,0 +1,10 @@
+# Claude Code 的本地上下文备忘。只在本机用，不需要发布到网站上。
+CLAUDE.md
+
+# VS Code 的本地设置
+.vscode/
+
+# 系统杂项
+.DS_Store
+Thumbs.db
+desktop.ini
