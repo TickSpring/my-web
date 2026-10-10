@@ -185,6 +185,24 @@ function validate(oldSrc, newSrc, snippet, clientId, workId, mode) {
 
 /* ---------------- GitHub ---------------- */
 
+/* 把 GitHub 的失败原因原样带回去。
+   x-accepted-github-permissions 是 GitHub 在 403 时给的提示，
+   会直接说明缺哪个权限——比笼统的「写不进」有用得多。 */
+async function ghFailure(res) {
+  let detail = '';
+  try {
+    const body = await res.json();
+    detail = (body && body.message) || '';
+  } catch (e) { /* 响应体不是 JSON，忽略 */ }
+
+  return {
+    status: res.status,
+    detail: detail,
+    needs: res.headers.get('x-accepted-github-permissions') || '',
+    scopes: res.headers.get('x-oauth-scopes') || ''
+  };
+}
+
 async function gh(env, path, init) {
   const headers = {
     'authorization': 'Bearer ' + env.GITHUB_PAT,
@@ -241,8 +259,12 @@ export async function onRequestPost(context) {
   // 这样即使你正好在本地推了东西，也不会把对方的改动冲掉。
   for (let attempt = 0; attempt < 3; attempt++) {
     const getRes = await gh(env, repoPath(env) + '?ref=' + BRANCH);
-    if (getRes.status === 401 || getRes.status === 403) return json({ error: 'upstream_auth' }, 502);
-    if (!getRes.ok) return json({ error: 'upstream_read', status: getRes.status }, 502);
+    if (getRes.status === 401 || getRes.status === 403) {
+      return json(Object.assign({ error: 'upstream_auth' }, await ghFailure(getRes)), 502);
+    }
+    if (!getRes.ok) {
+      return json(Object.assign({ error: 'upstream_read' }, await ghFailure(getRes)), 502);
+    }
 
     const meta = await getRes.json();
     if (typeof meta.size === 'number' && meta.size > MAX_FILE_BYTES) {
@@ -297,7 +319,7 @@ export async function onRequestPost(context) {
     }
 
     if (putRes.status === 409 || putRes.status === 422) continue;   // sha 过期，重取重试
-    return json({ error: 'upstream_write', status: putRes.status }, 502);
+    return json(Object.assign({ error: 'upstream_write' }, await ghFailure(putRes)), 502);
   }
 
   return json({ error: 'conflict_exhausted' }, 409);

@@ -2076,7 +2076,11 @@ function tsOpenInApp(scheme, webUrl) {
         setStatus('这一份之前已经提交过了，没有重复发。', 'ok');
       } else {
         submitEl.disabled = false;
-        setStatus('✕ ' + humanize(d.error, r.status), 'err');
+        var why = humanize(d.error, r.status);
+        // 把 GitHub 给的原话也带上，省得只看到一句笼统的「写不进」
+        var extra = [d.status ? 'HTTP ' + d.status : '', d.detail, d.needs].filter(Boolean).join(' / ');
+        if (extra) why += ' 〔' + extra + '〕';
+        setStatus('✕ ' + why, 'err');
       }
     }).catch(function (err) {
       submitEl.disabled = false;
